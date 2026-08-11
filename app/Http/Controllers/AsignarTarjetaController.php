@@ -14,7 +14,11 @@ class AsignarTarjetaController extends Controller
      */
     public function index()
     {
-        $asignartarjetas = asignartarjeta::all();
+        $asignartarjetas = asignartarjeta::with([
+        'inscripcion.informacion:id,nombre,apellido_paterno,apellido_materno',
+        'tarjeta:id,serie'
+        ])->orderByDesc('id')->get();
+
         return view('asignartarjetas.index', compact('asignartarjetas'));
     }
 

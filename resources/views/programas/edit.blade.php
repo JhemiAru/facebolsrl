@@ -2,12 +2,12 @@
 
 @section('content')
     <div class="content" style="margin-left: 10px">
-        <h1>Actualizacion de las programas</h1>
+        <h1 class="text-center"><b>Actualizacion de las Programas</b></h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-outline card-success">
                     <div class="card-header">
-                        <h3 class="card-title"><b>Llene los datos de forma correcta</b></h3>
+                        <h3 class="card-title"><b>Llene los Datos de Forma Correcta</b></h3>
                     </div>
                     <div class="card">
                         <div class="card-body">
@@ -17,7 +17,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Nombre de las programas</label>
+                                            <label for="">Nombre de las Programas</label>
                                             <input type="text" name="programa" value="{{ $programa->programa }}" class="form-control" required style="text-transform: uppercase;">
                                         </div>
                                     </div>

@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Support\Facades\Facade;
 
 
@@ -167,18 +168,24 @@ return [
          */
         App\Providers\AppServiceProvider::class,
         // Otros Service Providers
-        //Barryvdh\DomPDF\ServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        //Barryvdh\DomPDF\ServiceProvider::class,
+
+        /* Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class, */
     ],
 
     'aliases' => [
         // Otros aliases
         //'PDF' => Barryvdh\DomPDF\Facade::class,
+        'App' => Illuminate\Support\Facades\App::class,
+        'Auth' => Illuminate\Support\Facades\Auth::class,
         //$app->register(\Barryvdh\DomPDF\ServiceProvider::class),
+        /* 'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class, */
+
     ],
     /* 'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
         $app->register(\Barryvdh\DomPDF\ServiceProvider::class),
     ])->toArray(), */
-   
+
 ];

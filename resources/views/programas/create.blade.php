@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="content" style="margin-left: 10px">
-        <h1>Crear de una nueva programa</h1>
+        <h1 class="text-center"><b>Crear de una Nueva Programa</b></h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-outline card-primary">
@@ -17,14 +17,14 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Nombre del programa</label> <b>*</b>
+                                            <label for="">Nombre del Programa</label> <b>*</b>
                                             <input type="text" name="programa" value="{{ old('programa') }}" class="form-control" required >
                                         </div>
                                     </div>
 
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Tipo de hora</label> <b>*</b>
+                                            <label for="">Tipo de Hora</label> <b>*</b>
                                             <input type="text" name="tipo_hora" value="{{ old('tipo_hora') }}" class="form-control" required >
                                         </div>
                                     </div>

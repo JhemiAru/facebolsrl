@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -12,7 +11,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class User extends Authenticatable
 {
     use HasRoles, HasFactory, Notifiable;
-    //use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -23,6 +21,7 @@ class User extends Authenticatable
         'email',
         'password',
         'estado',
+        'foto', // Agregado para manejar la foto de perfil
     ];
 
     /**
@@ -47,15 +46,23 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    /* public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class);
-    } */
-    public function roles(){
-        return $this->belongsTo('App\Models\Role', 'id_role', 'id');
-    }
-    public function inscripciones(){
 
+    public function inscripciones()
+    {
         return $this->belongsTo('App\Models\Inscripcion', 'codigo_credencial', 'codigo_credencial');
     }
+
+    public function reporteactividades()
+    {
+        return $this->hasMany('App\Models\Reporteactividad', 'id_user', 'id');
+    }
+/*     public function informacion()
+{
+    return $this->belongsTo(Informacion::class, 'id_informacion');
+} */
+public function informacion()
+{
+    return $this->hasOne(Informacion::class, 'id_user', 'id'); // Ajusta 'id_user' si es el nombre correcto
+}
+
 }

@@ -12,5 +12,10 @@
         "laravel-vite-plugin": "^1.0",
         "sass": "^1.56.1",
         "vite": "^5.0"
+    },
+    "dependencies": {
+        "chart.js": "^4.4.9",
+        "laravel-echo": "^2.1.5",
+        "pusher-js": "^8.4.0"
     }
 }

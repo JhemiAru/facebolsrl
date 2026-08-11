@@ -37,6 +37,10 @@ class Inscripcion extends Model
 
         return $this->belongsTo('App\Models\Area', 'id_area', 'id');
     }
+    public function tarjetas()
+    {
+        return $this->belongsToMany('App\Models\Tarjeta', 'inscrip_tarjetas', 'id_inscripcion', 'id_tarjeta');
+    }
     public function asistencias(){
 
         return $this->hasMany('App\Models\Asistencia', 'id_inscripcion', 'id');
@@ -48,5 +52,20 @@ class Inscripcion extends Model
     public function users(){
 
         return $this->belongsTo('App\Models\User', 'codigo_credencial', 'codigo_credencial');
-    } 
+    }
+    public function reporte(){
+
+        return $this->belongsTo('App\Models\Reportes', 'id_reporte', 'id');
+    }
+
+    public function inscripReportes()
+    {
+        return $this->hasMany('App\Models\Inscrip_reporte', 'id_inscripcion');
+    }
+
+    // En App\Models\Inscripcion
+public function programa()
+{
+    return $this->belongsTo(Programa::class, 'id_programa', 'id');
+}
 }

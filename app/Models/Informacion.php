@@ -9,8 +9,11 @@ class Informacion extends Model
 {
     use HasFactory;
 
+    //protected $fillable = ['informacions']; // Asegúrate de que este modelo tenga el campo "nombre"
+
     public function inscripciones(){
         
         return $this->hasMany('App\Models\Inscripcion', 'id_informacion', 'id');
     }
+    
 }

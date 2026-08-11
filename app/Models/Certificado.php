@@ -17,4 +17,10 @@ class Certificado extends Model
 
         return $this->belongsTo('App\Models\Inscripcion', 'id_inscripcion', 'id');
     }
+
+
+    public function programa()
+{
+    return $this->belongsTo('App\Models\Programa', 'id_programa', 'id');
+}
 }

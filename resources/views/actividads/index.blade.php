@@ -44,7 +44,7 @@
                                         <td>{{ $actividad->nombre_actividad }}</td>
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ url('actividads', $actividad->id) }}" type="button" class="btn btn-info"><i class="bi bi-eye"></i></a>
+                                                <a href="{{ url('actividads', $actividad->id) }}" type="button" class="btn btn-primary"><i class="bi bi-eye"></i></a>
                                                 <a href="{{ route('actividads.edit', $actividad->id) }}" type="button" class="btn btn-success"><i class="bi bi-pencil"></i></a>
                                                 <form action="{{ url('actividads', $actividad->id) }}" method="POST">
                                                     @csrf

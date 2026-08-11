@@ -47,7 +47,7 @@
                                         <td>{{ $permiso->guard_name }}</td>
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ route('permisos.show', $permiso->id) }}" class="btn btn-info">
+                                                <a href="{{ route('permisos.show', $permiso->id) }}" class="btn btn-outline-primary">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#editPermisoModal{{ $permiso->id }}">

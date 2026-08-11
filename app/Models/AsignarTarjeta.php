@@ -15,6 +15,6 @@ class AsignarTarjeta extends Model
         return $this->belongsTo('App\Models\Inscripcion', 'id_inscripcion', 'id');
     }
     public function tarjeta(){
-        return $this->belongsTo('App\Models\tarjeta', 'id_tarjeta', 'id');
+        return $this->belongsTo('App\Models\Tarjeta', 'id_tarjeta', 'id');
     }
 }

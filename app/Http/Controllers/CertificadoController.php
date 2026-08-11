@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 use Carbon\Carbon;
-use App\Models\certificado;
-use App\Models\detalle;
+use App\Models\Certificado;
+use App\Models\Detalle;
 use App\Models\Asistencia;
 use Illuminate\Console\Signals;
 use Illuminate\Http\Request;
@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\UpdatecertificadoRequest;
 use App\Http\Requests\StorecertificadoRequest;
 use App\Models\Inscripcion;
-use App\Models\programa;
+use App\Models\Programa;
 
 class certificadoController extends Controller
 {
@@ -21,7 +21,7 @@ class certificadoController extends Controller
      */
     public function index()
     {
-        $certificados = certificado::all();
+        $certificados = Certificado::all();
 
         /* $informacions = Informacion::all(); */
         return view('certificados.index', compact('certificados'));
@@ -33,7 +33,7 @@ class certificadoController extends Controller
     public function create()
     {
         $certificados = new certificado();
-        $detalles = detalle::all();
+        $detalles = Detalle::all();
         $inscripcions = Inscripcion::all();
         return view('certificados.create', compact('certificados','detalles','inscripcions'));
     }
@@ -84,7 +84,7 @@ class certificadoController extends Controller
         /*  dd($certificado); */
         $certificado->save();
 
-        return redirect()->route('certificados.index')->with('mensaje', 'Se registró el área de la manera correcta');
+        return redirect()->route('certificados.index')->with('mensaje', 'Se registró el certificado de la manera correcta');
     }
 
 
@@ -94,7 +94,9 @@ class certificadoController extends Controller
     public function show($id)
     {
         $certificado = certificado::findOrFail($id);
-        return view('certificados.show', ['certificado' => $certificado]);
+         $programa = $certificado->programa; // ← Asumiendo que tiene relación
+
+        return view('certificados.show', compact('certificado', 'programa'));
     }
 
     /**
@@ -151,7 +153,7 @@ class certificadoController extends Controller
         /*  dd($certificado); */
         $certificado->save();
 
-        return redirect()->route('certificados.index')->with('mensaje', 'Se Actualizó el área de manera correcta');
+        return redirect()->route('certificados.index')->with('mensaje', 'Se Actualizó el certificado de manera correcta');
     }
 
 

@@ -38,4 +38,10 @@ class Asistencia extends Model
 
         return $this->belongsTo('App\Models\Actividad', 'id_actividad', 'id');
     }
+
+    public function inscripcion()
+{
+    return $this->belongsTo(Inscripcion::class, 'id_inscripcion', 'id');
+}
+
 }

@@ -18,7 +18,7 @@
 
                     <div class="mb-3">
                         <label for="name" class="form-label">Nombre del Usuario</label>
-                        <input id="name" type="text" class="form-control" name="name" value="{{ $usuario->inscripciones->informacion->apellido_paterno }} {{ $usuario->inscripciones->informacion->apellido_materno }} {{ $usuario->inscripciones->informacion->nombre }}" autocomplete="name" autofocus readonly>
+                        <input id="name" type="text" class="form-control" name="name" value="{{ $usuario->inscripciones?->informacion->apellido_paterno }} {{ $usuario->inscripciones?->informacion->apellido_materno }} {{ $usuario->inscripciones?->informacion->nombre }}" autocomplete="name" autofocus readonly>
 
                         @error('name')
                             <span class="invalid-feedback" role="alert">

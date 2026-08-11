@@ -18,6 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('estado');
+            $table->string('foto')->nullable();
 
             $table->char('codigo_credencial')->nullable();
             $table->foreign('codigo_credencial')->references('codigo_credencial')->on('inscripcions')->onDelete('cascade')->onUpdate('cascade');

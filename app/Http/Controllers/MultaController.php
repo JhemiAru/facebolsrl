@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\multa;
+use App\Models\Multa;
 use App\Models\Sigla;
 use Illuminate\Console\Signals;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class multaController extends Controller
      */
     public function index()
     {
-        $multas = multa::all();
+        $multas = Multa::all();
         /* $informacions = Informacion::all(); */
         return view('multas.index', compact('multas'));
     }

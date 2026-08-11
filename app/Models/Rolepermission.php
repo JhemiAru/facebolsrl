@@ -1,5 +1,5 @@
 <?php
-/* 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -12,4 +12,4 @@ class Rolepermission extends Model
     protected $table = 'role_has_permissions'; // Nombre de la tabla pivote
 
     protected $fillable = ['role_id', 'permission_id'];
-} */
+}

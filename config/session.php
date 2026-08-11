@@ -33,9 +33,11 @@ return [
     |
     */
 
-    'lifetime' => env('SESSION_LIFETIME', 30),
+    'lifetime' => env('SESSION_LIFETIME', 43200), //720
 
     'expire_on_close' => env('SESSION_EXPIRE_ON_CLOSE', false),
+    /* 'lifetime' => 43200, // 30 días en minutos (ajusta según necesites)
+    'expire_on_close' => false, // Mantener sesión aunque se cierre el navegador */
 
     /*
     |--------------------------------------------------------------------------
@@ -217,5 +219,5 @@ return [
 
 
     // Configuración del tiempo de vida de la cookie (opcional)
-    'cookie_lifetime' => 40, // En minutos
+    'cookie_lifetime' => 30, // En minutos
 ];

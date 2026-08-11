@@ -44,11 +44,20 @@
                                 @foreach ($asignartarjetas as $asignartarjeta)
                                     <tr>
                                         <td><?php echo $contador = $contador + 1; ?></td>
-                                        <td>{{ $asignartarjeta->inscripcion->informacion->apellido_paterno }} {{ $asignartarjeta->inscripcion->informacion->apellido_materno }} {{ $asignartarjeta->inscripcion->informacion->nombre }}</td>
-                                        <td>{{ $asignartarjeta->tarjeta->serie }}</td>
+                                        {{-- <td> {{ $asignartarjeta->inscripcion->informacion->nombre }} {{ $asignartarjeta->inscripcion->informacion->apellido_paterno }} {{ $asignartarjeta->inscripcion->informacion->apellido_materno }} </td> --}}
+                                        <td>
+                                            @if($asignartarjeta->inscripcion && $asignartarjeta->inscripcion->informacion)
+                                                {{ $asignartarjeta->inscripcion->informacion->nombre }}
+                                                {{ $asignartarjeta->inscripcion->informacion->apellido_paterno }}
+                                                {{ $asignartarjeta->inscripcion->informacion->apellido_materno }}
+                                            @else
+                                                <span class="text-muted">Sin información</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $asignartarjeta->tarjeta?->serie ?? 'Sin asignar' }}</td>
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ url('asignartarjetas',$asignartarjeta->id) }}" type="button" class="btn btn-info" ><i class="bi bi-eye"></i></a>
+                                                <a href="{{ url('asignartarjetas',$asignartarjeta->id) }}" type="button" class="btn btn-primary" ><i class="bi bi-eye"></i></a>
                                                 {{-- <a href="{{ route('asignartarjetas.edit', $asignartarjeta->id) }}" type="button" class="btn btn-success"><i class="bi bi-pencil"></i></a>
                                                 <form action="{{ url('asignartarjetas',$asignartarjeta->id) }}" method="POST">
                                                     @csrf

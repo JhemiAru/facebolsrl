@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\programa;
+use App\Models\Programa;
 use App\Models\Sigla;
 use Illuminate\Console\Signals;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class ProgramaController extends Controller
      */
     public function index()
     {
-        $programas = programa::all();
+        $programas = Programa::all();
         /* $informacions = Informacion::all(); */
         return view('programas.index', compact('programas'));
     }
@@ -64,8 +64,8 @@ class ProgramaController extends Controller
      */
     public function show($id)
     {
-        $programa = programa::findOrFail($id);
-        return view('programas.show', ['programa' => $programa]);
+        $programa = Programa::findOrFail($id);
+        return view('programas.show', compact('programa'));
     }
 
     /**

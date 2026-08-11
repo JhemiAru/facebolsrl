@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="content" style="margin-left: 10px">
-        <h1 class="text-center"><b>Bienvenido a la Administración de Información</b></h1>
+        <h1 class="text-center"><b>Bienvenido a la Administración de Formulario de datos</b></h1>
 
         @if ($message = Session::get('mensaje'))
             <script>
@@ -22,6 +22,9 @@
                     <div class="card-header">
                         <h3 class="card-title"><b>Inforamciones Registrados</b></h3>
                         <div class="card-tools">
+                            <a href="{{ url('/informaciones/pdf') }}" class="btn btn-warning" target="_blank">
+                                <i class="bi bi-printer-fill"></i> Imprimir Reporte
+                            </a>
                             <a href="{{ url('/informaciones/create') }}" class="btn btn-primary">
                                 <i class="bi bi-file-plus"></i> Agregar nueva informacion
                             </a>
@@ -33,14 +36,14 @@
                             <thead>
                                 <tr>
                                     <th>Nro</th>
+                                    <th>Nombres</th>
                                     <th>Apellido Paterno</th>
                                     <th>Apellido materno</th>
-                                    <th>Nombres</th>
                                     <th>Celular</th>
-                                    <th>Instituto universidad</th>
-                                    <th>carrera</th>
-                                    <th>Año o Semestral</th>
-                                    <th>invitado visita</th>
+                                    <th>Institución</th>
+                                    <th>Área de Estudio</th>
+                                    <th>Nivel de Estudio</th>
+                                    <th>Referencia</th>
                                     <th>Accion</th>
                                 </tr>
                             </thead>
@@ -49,9 +52,9 @@
                                 @foreach ($informacions as $informacion)
                                     <tr>
                                         <td><?php echo $contador = $contador + 1; ?></td>
+                                        <td>{{ $informacion->nombre }}</td>
                                         <td>{{ $informacion->apellido_paterno }}</td>
                                         <td>{{ $informacion->apellido_materno }}</td>
-                                        <td>{{ $informacion->nombre }}</td>
                                         <td>{{ $informacion->celular }}</td>
                                         <td>{{ $informacion->insti_univer }}</td>
                                         <td>{{ $informacion->carrera }}</td>
@@ -60,7 +63,7 @@
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
                                                 <a href="{{ url('informaciones', $informacion->id) }}" type="button"
-                                                    class="btn btn-info"><i class="bi bi-eye"></i></a>
+                                                    class="btn btn-primary"><i class="bi bi-eye"></i></a>
                                                 <a href="{{ route('informaciones.edit', $informacion->id) }}"
                                                     type="button" class="btn btn-success"><i class="bi bi-pencil"></i></a>
                                                 <form action="{{ url('informaciones', $informacion->id) }}" method="POST">

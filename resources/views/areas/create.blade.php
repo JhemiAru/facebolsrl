@@ -17,7 +17,7 @@
                                 <div class="row">
                                     <div class="col-md-4">
                                         <div class="form-group">
-                                            <label for="">Nombre de las areas</label> <b>*</b>
+                                            <label for="nombre_area">Nombre de las areas</label> <b>*</b>
                                             <input type="text" name="nombre_area" value="{{ old('nombre_area') }}" class="form-control" required style="text-transform: uppercase;">
                                         </div>
                                     </div>

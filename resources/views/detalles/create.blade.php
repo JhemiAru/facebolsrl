@@ -2,12 +2,12 @@
 
 @section('content')
     <div class="content" style="margin-left: 10px">
-        <h1>Crear de una nuevo detalle</h1>
+        <h1 class="text-center"><b>Crear Nuevo Detalle</b></h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-outline card-primary">
                     <div class="card-header">
-                        <h3 class="card-title"><b>Llene los datos de forma correcta</b></h3>
+                        <h3 class="card-title"><b>Llene los Datos de Forma Correcta</b></h3>
                     </div>
                     <div class="card">
                         <div class="card-body">
@@ -15,18 +15,25 @@
                                 @csrf
 
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    {{-- <div class="col-md-4">
                                         <div class="form-group">
                                             <label for="">Descripción</label> <b>*</b>
                                             <input type="text" name="descripcion" value="{{ old('descripcion') }}" class="form-control" required >
                                         </div>
+                                    </div> --}}
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <label for="">Descripción <b>*</b></label>
+                                            <textarea name="descripcion" class="form-control" style="width: 100%; height: 150px;" required>{{ old('descripcion') }}</textarea>
+                                        </div>
                                     </div>
+                                    
 
                                     <div class="col-md-4">
-                                        <label for="id_area">Area</label>
+                                        <label for="id_area">Área</label>
                                         <select name="id_area" id="id_area" class="form-control selectpicker"
                                             data-live-search="true" required>
-                                            <option value="">Seleccionar Area</option>
+                                            <option value="">Seleccionar Área</option>
                                             @foreach ($areas as $area)
                                                 <option value="{{ $area->id }}">
                                                     {{ $area->nombre_area }}

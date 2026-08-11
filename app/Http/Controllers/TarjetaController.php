@@ -7,6 +7,7 @@ use App\Models\Tarjeta;
 use App\Models\Informacion;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use App\Models\Asistencia;
 
 class TarjetaController extends Controller
 {
@@ -15,9 +16,10 @@ class TarjetaController extends Controller
      */
     public function index()
     {
-        $tarjetas = Tarjeta::with('asignarTarjeta')->get();
-        /* $informacions = Informacion::all(); */
-        /* $tarjetaasignada = Tarjeta::with('asignarTarjeta')->get(); */
+        $tarjetas = Tarjeta::with([
+        'asignartarjeta.inscripcion.informacion:id,nombre,apellido_paterno,apellido_materno',
+        'asignartarjeta' // para que cargue la relación asignartarjeta completa (o puedes filtrar campos)
+        ])->orderByDesc('id')->get();
 
         return view('tarjetas.index', compact('tarjetas'));
     }

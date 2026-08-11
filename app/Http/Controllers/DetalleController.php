@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\detalle;
+use App\Models\Detalle;
 use App\Models\Area;
 use Illuminate\Console\Signals;
 use Illuminate\Http\Request;
@@ -10,7 +10,7 @@ use PhpParser\Node\Arg;
 
 use App\Http\Requests\UpdatedetalleRequest;
 use App\Http\Requests\StoredetalleRequest;
-use App\Models\programa;
+use App\Models\Programa;
 
 class detalleController extends Controller
 {
@@ -30,7 +30,7 @@ class detalleController extends Controller
      */
     public function create()
     {
-        $detalles = new detalle();
+        $detalles = new Detalle();
         $areas = Area::all();
         $programas = Programa::all();
         return view('detalles.create', compact('detalles','areas','programas'));
@@ -70,7 +70,7 @@ class detalleController extends Controller
     public function show($id)
     {
         $detalle = detalle::findOrFail($id);
-        return view('detalles.show', ['detalle' => $detalle]);
+        return view('detalles.show', compact('detalle'));
     }
 
     /**
@@ -79,7 +79,9 @@ class detalleController extends Controller
     public function edit($id)
     {
         $detalle = detalle::findOrFail($id);
-        return view('detalles.edit', compact('detalle'));
+        $areas = Area::all();
+        $programas = Programa::all();
+        return view('detalles.edit', compact('detalle','areas','programas'));
     }
 
     /**
@@ -87,12 +89,11 @@ class detalleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $detalle = detalle::find($id);
+        $detalle = Detalle::findOrFail($id);
 
-        $detalle->detalle =$request->detalle;
-
-        // Capturar las primeras tres letras del campo sigla
-        $detalle->tipo_hora = $request->tipo_hora;
+        $detalle->descripcion =$request->descripcion;
+        $detalle->id_area = $request->id_area;
+        $detalle->id_programa = $request->id_programa;
 
         /* $detalle->estado = '1'; */
         /* dd($detalle); */

@@ -31,13 +31,15 @@
                                     </div>
 
                                     <div class="col-md-4">
-                                        <label for="id_inscripcion">Inscritos</label>
-                                        <select name="id_inscripcion" id="id_inscripcion" class="form-control selectpicker"
+                                        <label for="id_inscripcion">Pasantes Inscritos</label>
+                                        <select name="id_inscripcion" id="id_inscripcion" class="form-control select2"
                                             data-live-search="true" required>
                                             <option value="">Seleccionar Pasante</option>
                                             @foreach ($inscripcions as $inscripcion)
                                                 <option value="{{ $inscripcion->id }}">
-                                                    {{ $inscripcion->informacion->apellido_paterno }} {{ $inscripcion->informacion->apellido_materno }} {{ $inscripcion->informacion->nombre }}
+                                                    {{ $inscripcion->informacion->nombre }}
+                                                    {{ $inscripcion->informacion->apellido_paterno }}
+                                                    {{ $inscripcion->informacion->apellido_materno }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -71,3 +73,21 @@
 
     </div>
 @endsection
+<!-- Include jQuery -->
+<script src="{{ asset('https://code.jquery.com/jquery-3.6.0.min.js') }}"></script>
+
+<!-- Include Select2 CSS and JS -->
+<link href="{{ asset('https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css') }}"
+    rel="stylesheet" />
+<script src="{{ asset('https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js') }}"></script>
+
+<script>
+    /* busqueda de apellidos y nombres del pasantes */
+    $(document).ready(function() {
+        // Inicializa Select2 en el select con id #id_inscripcion
+        $('#id_inscripcion').select2({
+            placeholder: 'Seleccionar Pasantes', // Texto que aparece cuando no se ha seleccionado nada
+            allowClear: true // Permite limpiar la selección
+        });
+    });
+</script>

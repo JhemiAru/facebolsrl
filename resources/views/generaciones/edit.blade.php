@@ -25,6 +25,20 @@
                                         <label for="">Año</label>
                                         <input type="text" name="año" value="{{ $generacion->año }}" class="form-control" required>
                                     </div>                            
+                                    <div class="col-md-2">
+                                        <div class="form-group">
+                                            <label for="">Estado</label>
+                                            <br>
+                                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                                <label class="btn btn-outline-success {{ $generacion->estado == 'activo' ? 'active' : '' }}">
+                                                    <input type="radio" name="estado" value="1" {{ $generacion->estado == 1 ? 'checked' : '' }}> Activo
+                                                </label>
+                                                <label class="btn btn-outline-danger {{ $generacion->estado == 'inactivo' ? 'active' : '' }}">
+                                                    <input type="radio" name="estado" value="0" {{ $generacion->estado == 0 ? 'checked' : '' }}> Inactivo
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <hr>
                                 <div class="row">

@@ -46,7 +46,7 @@
                                         <td>{{ $extension->expedido }}</td>
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ url('extensiones', $extension->id) }}" type="button" class="btn btn-info"><i class="bi bi-eye"></i></a>
+                                                <a href="{{ url('extensiones', $extension->id) }}" type="button" class="btn btn-primary"><i class="bi bi-eye"></i></a>
                                                 <a href="{{ route('extensiones.edit', $extension->id) }}" type="button" class="btn btn-success"><i class="bi bi-pencil"></i></a>
                                                 <form action="{{ url('extensiones', $extension->id) }}" method="POST">
                                                     @csrf

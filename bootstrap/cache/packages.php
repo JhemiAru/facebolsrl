@@ -1,4 +1,27 @@
 <?php return array (
+  'anhskohbo/no-captcha' => 
+  array (
+    'aliases' => 
+    array (
+      'NoCaptcha' => 'Anhskohbo\\NoCaptcha\\Facades\\NoCaptcha',
+    ),
+    'providers' => 
+    array (
+      0 => 'Anhskohbo\\NoCaptcha\\NoCaptchaServiceProvider',
+    ),
+  ),
+  'barryvdh/laravel-dompdf' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Barryvdh\\DomPDF\\ServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Pdf' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
+      'PDF' => 'Barryvdh\\DomPDF\\Facade\\Pdf',
+    ),
+  ),
   'codedge/laravel-fpdf' => 
   array (
     'aliases' => 
@@ -17,6 +40,13 @@
       0 => 'Laravel\\Sail\\SailServiceProvider',
     ),
   ),
+  'laravel/sanctum' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Laravel\\Sanctum\\SanctumServiceProvider',
+    ),
+  ),
   'laravel/tinker' => 
   array (
     'providers' => 
@@ -29,6 +59,17 @@
     'providers' => 
     array (
       0 => 'Laravel\\Ui\\UiServiceProvider',
+    ),
+  ),
+  'livewire/livewire' => 
+  array (
+    'aliases' => 
+    array (
+      'Livewire' => 'Livewire\\Livewire',
+    ),
+    'providers' => 
+    array (
+      0 => 'Livewire\\LivewireServiceProvider',
     ),
   ),
   'nesbot/carbon' => 

@@ -55,7 +55,7 @@
                                         <td style="text-align: center">{{ $generacion->año }}</td>
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ url('generaciones', $generacion->id) }}" type="button" class="btn btn-info"><i class="bi bi-eye"></i></a>
+                                                <a href="{{ url('generaciones', $generacion->id) }}" type="button" class="btn btn-primary"><i class="bi bi-eye"></i></a>
                                                 <a href="{{ route('generaciones.edit', $generacion->id) }}" type="button" class="btn btn-success"><i class="bi bi-pencil"></i></a>
                                                 <form action="{{ url('generaciones', $generacion->id) }}" method="POST">
                                                     @csrf

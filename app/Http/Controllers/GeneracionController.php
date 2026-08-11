@@ -69,7 +69,7 @@ class GeneracionController extends Controller
         $generacion = Generacion::find($id);
 
         $generacion->generacion = $request->generacion;
-        $generacion->estado = '1';
+        $generacion->estado = $request->estado;
         $generacion->año = $request->año;
         /* dd($area); */
         $generacion->save();

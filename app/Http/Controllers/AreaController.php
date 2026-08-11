@@ -39,7 +39,7 @@ class AreaController extends Controller
     public function store(Request $request)
     {
         // Validación de los campos
-       /*  $request->validate([
+        /* $request->validate([
             'nombre_area'  => 'required',
             'sigla'  => 'required' 
         ]); */
@@ -47,10 +47,8 @@ class AreaController extends Controller
         $area = new Area();
 
         $area->nombre_area = strtoupper($request->nombre_area);
-
         // Capturar las primeras tres letras del campo sigla
-        $area->sigla = strtoupper(substr($request->nombre_area, 0, 3));
-        
+        $area->sigla = strtoupper(substr($request->nombre_area, 0, 4));
         $area->estado = '1';
        /*  dd($area); */
         $area->save();
@@ -87,9 +85,9 @@ class AreaController extends Controller
         $area->nombre_area = strtoupper($request->nombre_area);
 
         // Capturar las primeras tres letras del campo sigla
-        $area->sigla = strtoupper(substr($request->nombre_area, 0, 3));
+        $area->sigla = strtoupper(substr($request->nombre_area, 0, 4));
 
-        $area->estado = '1';
+        $area->estado = $request->estado;
         /* dd($area); */
         $area->save();
 

@@ -45,7 +45,7 @@
 
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ url('requisitos', $requisito->id) }}" type="button" class="btn btn-info"><i class="bi bi-eye"></i></a>
+                                                <a href="{{ url('requisitos', $requisito->id) }}" type="button" class="btn btn-primary"><i class="bi bi-eye"></i></a>
                                                 <a href="{{ route('requisitos.edit', $requisito->id) }}" type="button" class="btn btn-success"><i class="bi bi-pencil"></i></a>
                                                 <form action="{{ url('requisitos', $requisito->id) }}" method="POST">
                                                     @csrf

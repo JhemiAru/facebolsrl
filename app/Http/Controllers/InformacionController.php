@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
 use Barryvdh\DomPDF\Facade\Pdf;
-use illuminate\Support\Facades\App;
+//use illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\App;
+
 
 class InformacionController extends Controller
 {
@@ -16,15 +18,16 @@ class InformacionController extends Controller
      */
     public function index()
     {
-        $informacions = Informacion::all()->sortByDesc('id');
-            /* $informacions = Informacion::all(); */
+        $informacions = Informacion::orderBy('id', 'desc')->get();
+
+        /* $informacions = Informacion::all(); */
         return view('informaciones.index', ['informacions' => $informacions]);
     }
 
-    public function reportes()
+    /* public function reportes()
     {
         return view('informaciones.reportes');
-    }
+    } */
 
     public function pdf()
     {
@@ -32,9 +35,10 @@ class InformacionController extends Controller
         $pdf->loadHTML('<h1>Test</h1>');
         return $pdf->stream(); */
         $informacions = Informacion::all();
-        /* $pdf = Pdf::loadView('informaciones.pdf', $informacions);
-        return $pdf->stream(); */
-        return view('informaciones.pdf', compact('informacions'));
+        //$informacions = Informacion::paginate();
+        $pdf = Pdf::loadView('informaciones.pdf', compact('informacions'));
+        return $pdf->stream();
+        //return view('informaciones.pdf', compact('informacions'));
     }
 
     /**
@@ -49,54 +53,55 @@ class InformacionController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    // Validar la solicitud
-    $request->validate([
-        'apellido_paterno' => 'required|string|max:255',
-        'apellido_materno' => 'required|string|max:255',
-        'nombre' => [
-            'required',
-            'string',
-            'max:255',
-            Rule::unique('informacions')->where(function ($query) use ($request) {
-                return $query->where('apellido_paterno', $request->apellido_paterno)
-                             ->where('apellido_materno', $request->apellido_materno)
-                             ->where('nombre', $request->nombre);
-            }),
-        ],
-        'celular' => 'required|regex:/^[0-9]{8,9}$/',
-        'insti_univer' => 'required|string|max:255',
-        'carrera' => 'required|string|max:255',
-        'año' => 'required',
-        'invitado_visita' => 'required|string|max:255',
-    ], [
-        // Mensaje de error personalizado para duplicados
-        'nombre.unique' => 'Ya existe una persona registrada con el mismo Apellidos y Nombres.',
-    ]);
+    {
+        // Validar la solicitud
+        $request->validate([
+            'apellido_paterno' => 'required|string|max:255',
+            'apellido_materno' => 'required|string|max:255',
+            'nombre' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('informacions')->where(function ($query) use ($request) {
+                    return $query->where('apellido_paterno', $request->apellido_paterno)
+                        ->where('apellido_materno', $request->apellido_materno)
+                        ->where('nombre', $request->nombre);
+                }),
+            ],
+            'celular' => 'required|regex:/^[0-9]{8,9}$/',
+            'insti_univer' => 'required|string|max:255',
+            'carrera' => 'required|string|max:255',
+            'año' => 'required',
+            'invitado_visita' => 'required|string|max:255',
+        ], [
+            // Mensaje de error personalizado para duplicados
+            'nombre.unique' => 'Ya existe una persona registrada con el mismo Apellidos y Nombres.',
+        ]);
 
-    // Crear nueva instancia de Informacion
-    $informacion = new Informacion();
+        // Crear nueva instancia de Informacion
+        $informacion = new Informacion();
 
-    $informacion->apellido_paterno = mb_strtoupper($request->apellido_paterno);
-    $informacion->apellido_materno = mb_strtoupper($request->apellido_materno);
-    $informacion->nombre = mb_strtoupper($request->nombre);
-    $informacion->celular = $request->celular;
-    $informacion->insti_univer = mb_strtoupper($request->insti_univer);
-    $informacion->carrera = mb_strtoupper($request->carrera);
-    $informacion->año = mb_strtoupper($request->año);
-    $informacion->invitado_visita = mb_strtoupper($request->invitado_visita);
-    $formulario = $request->formulario;
+        $informacion->apellido_paterno = mb_strtoupper($request->apellido_paterno);
+        $informacion->apellido_materno = mb_strtoupper($request->apellido_materno);
+        $informacion->nombre = mb_strtoupper($request->nombre);
+        $informacion->celular = $request->celular;
+        $informacion->insti_univer = mb_strtoupper($request->insti_univer);
+        $informacion->carrera = mb_strtoupper($request->carrera);
+        $informacion->año = mb_strtoupper($request->año);
+        $informacion->invitado_visita = mb_strtoupper($request->invitado_visita);
+        $formulario = $request->formulario;
 
-    // Guardar la información en la base de datos
-    $informacion->save();
+        // Guardar la información en la base de datos
+        $informacion->save();
+        cache()->forget('clientes_facturacion');
 
-    // Redirigir según la condición del formulario
-    if ($formulario) {
-        return redirect()->route('login')->with('mensaje', 'Se registró la información correctamente.');
-    } else {
-        return redirect()->route('informaciones.index')->with('mensaje', 'Se registró la información correctamente.');
+        // Redirigir según la condición del formulario
+        if ($formulario) {
+            return redirect()->route('login')->with('mensaje', 'Se registró la información correctamente.');
+        } else {
+            return redirect()->route('informaciones.index')->with('mensaje', 'Se registró la información correctamente.');
+        }
     }
-}
 
     /**
      * Display the specified resource.
@@ -148,6 +153,7 @@ class InformacionController extends Controller
         $informacion->invitado_visita = mb_strtoupper($request->invitado_visita);
 
         $informacion->save();
+        cache()->forget('clientes_facturacion');
 
         return redirect()->route('informaciones.index')->with('mensaje', 'Se actualizo la informacion de la manera correcta');
     }

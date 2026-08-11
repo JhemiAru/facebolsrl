@@ -57,7 +57,7 @@
                                         </td>
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ route('roles.show', $role->id) }}" class="btn btn-info">
+                                                <a href="{{ route('roles.show', $role->id) }}" class="btn btn-primary">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
                                                 <button type="button" class="btn btn-success" data-toggle="modal"

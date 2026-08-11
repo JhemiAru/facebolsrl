@@ -19,14 +19,14 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-outline card-primary">
-                    {{-- <div class="card-header">
+                    <div class="card-header">
                         <h3 class="card-title"><b>Áreas Registrados</b></h3>
                         <div class="card-tools">
                             <a href="{{ url('/areas/create') }}" class="btn btn-primary">
                                 <i class="bi bi-file-plus"></i> Agregar nuevo area
                             </a>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="card-body" style="...">
 
                         <table id="example1" class="table table-bordered table-striped table-m">
@@ -51,7 +51,7 @@
                                             @if ($area->estado == 0)
                                                 <span class="badge badge-danger">Inactivo</span>
                                             @else
-                                                <span class="badge badge-info">Activo</span>
+                                                <span class="badge badge-primary">Activo</span>
                                             @endif
                                         </td>
                                         <td style="text-align: center">

@@ -51,7 +51,7 @@
                                         <td>{{ $multa->p2 }}</td>
                                         <td>
                                             @if ($multa->turno == 1)
-                                                <span class="badge bg-info"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">MAÑANA</font></font></span>
+                                                <span class="badge bg-primary"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">MAÑANA</font></font></span>
                                             @else
                                                 <span class="badge bg-warning"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TARDE</font></font></span>
                                             @endif
@@ -59,7 +59,7 @@
 
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ url('multas', $multa->id) }}" type="button" class="btn btn-info"><i class="bi bi-eye"></i></a>
+                                                <a href="{{ url('multas', $multa->id) }}" type="button" class="btn btn-primary"><i class="bi bi-eye"></i></a>
                                                 <a href="{{ route('multas.edit', $multa->id) }}" type="button" class="btn btn-success"><i class="bi bi-pencil"></i></a>
                                                 <form action="{{ url('multas', $multa->id) }}" method="POST">
                                                     @csrf

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="content" style="margin-left: 10px">
-        <h1>Actualizacion de las certificados</h1>
+        <h1 class="text-center"><b>Actualizacion de las certificados</b></h1>
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-outline card-success">
@@ -16,7 +16,7 @@
                                 {{ method_field('PATCH') }}
                                 <div class="row">
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-6">
                                         <label for="id_detalle">Detalles</label>
                                         <select name="id_detalle" id="id_detalle" class="form-control selectpicker"
                                             data-live-search="true" required>
@@ -29,14 +29,16 @@
                                         </select>
                                     </div>
 
-                                    <div class="col-md-4">
-                                        <label for="id_inscripcion">Inscritos</label>
+                                    <div class="col-md-6">
+                                        <label for="id_inscripcion">Nombre del Pasante</label>
                                         <select name="id_inscripcion" id="id_inscripcion" class="form-control selectpicker"
                                             data-live-search="true" required>
                                             <option value="">Seleccionar Pasante</option>
                                             @foreach ($inscripcions as $inscripcion)
                                                 <option value="{{ $inscripcion->id }}" {{ old('id_inscripcion', $certificado->id_inscripcion) == $inscripcion->id ? 'selected' : '' }}>
-                                                    {{ $inscripcion->informacion->nombre_apellido }}
+                                                    {{ $inscripcion->informacion->nombre }}
+                                                    {{ $inscripcion->informacion->apellido_paterno }}
+                                                    {{ $inscripcion->informacion->apellido_materno }}
                                                 </option>
                                             @endforeach
                                         </select>

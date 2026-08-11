@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="content" style="margin-left: 10px">
-        <h1 class="text-center"><b>Bienvenido a la Administración de las Áreas</b></h1>
+        <h1 class="text-center"><b>Bienvenido a la Administración de Programas</b></h1>
 
         @if ($message = Session::get('mensaje'))
             <script>
@@ -47,7 +47,7 @@
 
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ url('programas', $programa->id) }}" type="button" class="btn btn-info"><i class="bi bi-eye"></i></a>
+                                                <a href="{{ url('programas', $programa->id) }}" type="button" class="btn btn-primary"><i class="bi bi-eye"></i></a>
                                                 <a href="{{ route('programas.edit', $programa->id) }}" type="button" class="btn btn-success"><i class="bi bi-pencil"></i></a>
                                                 <form action="{{ url('programas', $programa->id) }}" method="POST">
                                                     @csrf
@@ -71,12 +71,12 @@
                                     "pageLength": 10,
                                     "language": {
                                         "emptyTable": "No hay información",
-                                        "info": "Mostrando _START_ a _END_ de _TOTAL_ Áreas",
-                                        "infoEmpty": "Mostrando 0 a 0 de 0 Áreas",
-                                        "infoFiltered": "(Filtrado de _MAX_ total Áreas)",
+                                        "info": "Mostrando _START_ a _END_ de _TOTAL_ Programas",
+                                        "infoEmpty": "Mostrando 0 a 0 de 0 Programas",
+                                        "infoFiltered": "(Filtrado de _MAX_ total Programas)",
                                         "infoPostFix": "",
                                         "thousands": ",",
-                                        "lengthMenu": "Mostrar _MENU_ Áreas",
+                                        "lengthMenu": "Mostrar _MENU_ Programas",
                                         "loadingRecords": "Cargando...",
                                         "processing": "Procesando...",
                                         "search": "Buscador:",

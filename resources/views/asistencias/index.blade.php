@@ -33,9 +33,11 @@
                         <table id="example1" class="table table-bordered table-striped table-m text-center">
                             <thead>
                                 <tr>
-                                    <th>Nro</th>
+                                    {{-- <th>Nro</th> --}}
+                                    <th>Estado</th>
                                     <th>Informacion pasante</th>
                                     <th>Fecha de inscripcion</th>
+                                    <th>Turno</th>
                                     <th>Codigo de Credencial</th>
                                     <th>Generacion</th>
                                     <th>Area</th>
@@ -43,21 +45,44 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php $contador = 0; ?>
+                                
                                 @foreach ($inscripcions as $inscripcion)
                                     <tr>
-                                        <td><?php echo $contador = $contador + 1; ?></td>
-                                        <td>{{ $inscripcion->informacion->apellido_paterno }} {{ $inscripcion->informacion->apellido_materno }} {{ $inscripcion->informacion->nombre }}</td>
+                                        
+                                        <td>
+                                            @if ($inscripcion->estado == 0)
+                                                <span class="badge bg-danger"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Inactivo</font></font></span>
+                                            @else
+                                                <span class="badge bg-primary"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Activo</font></font></span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $inscripcion->informacion->nombre }}
+                                            {{ $inscripcion->informacion->apellido_paterno }}
+                                            {{ $inscripcion->informacion->apellido_materno }}
+                                            </td>
                                         <td>{{ $inscripcion->f_inscripcion }}</td>
-                                        <td>{{ $inscripcion->codigo_credencial }}</td>
-                                        <td>{{ $inscripcion->generacion->generacion }}</td>
-                                        <td>{{ $inscripcion->area->nombre_area }}</td>
+                                        <td>{{-- {{ $inscripcion->asistencias->first()->multa->turno ?? '' }} --}}
+                                            @if ($inscripcion->asistencias->first()->multa->turno ?? '' == 1)
+                                                <span class="badge bg-primary"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">MAÑANA</font></font></span>
+                                            @else
+                                                <span class="badge bg-warning"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">TARDE</font></font></span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success" style="font-size: -1em;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ $inscripcion->codigo_credencial }}</font></font></span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success" style="font-size: -1em;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ $inscripcion->generacion->generacion }}</font></font></span>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success" style="font-size: -1em;"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">{{ $inscripcion->area->nombre_area }}</font></font></span>
+                                        </td>
                                         <td class="center-text">
                                             <div class="btn-group btn-group-custom" role="group"
                                                 aria-label="Basic example">
                                                 <a href="{{ url('asistencias', $inscripcion->id) }}" type="button"
                                                     class="btn btn-info btn-custom glowing-button">
-                                                    <i class="bi bi-eye"></i>
+                                                    <i class="bi bi-eye"></i> Ver Planillas
                                                 </a>
                                             </div>
                                         </td>
@@ -83,7 +108,7 @@
                                         "zeroRecords": "Sin resultados encontrados",
                                         "paginate": {
                                             "first": "Primero",
-                                            "last": "Ultimo",
+                                            "last": "Último",
                                             "next": "Siguiente",
                                             "previous": "Anterior"
                                         }
@@ -91,30 +116,12 @@
                                     "responsive": true,
                                     "lengthChange": true,
                                     "autoWidth": false,
-                                    buttons: [{
-                                            extend: 'collection',
-                                            text: 'Reportes',
-                                            orientation: 'landscape',
-                                            buttons: [{
-                                                text: 'Copiar',
-                                                extend: 'copy',
-                                            }, {
-                                                extend: 'pdf'
-                                            }, {
-                                                extend: 'csv'
-                                            }, {
-                                                extend: 'excel'
-                                            }, {
-                                                text: 'Imprimir',
-                                                extend: 'print'
-                                            }]
-                                        },
-                                        {
-                                            extend: 'colvis',
-                                            text: 'Visor de columnas',
-                                            collectionLayout: 'fixed three-column'
-                                        }
-                                    ],
+                                    "searching": true, // Habilitar búsqueda en todos los campos
+                                    "order": [[2, 'desc']], // Ordenar por "Código de Credencial" (columna 4) en orden descendente
+                                    "columnDefs": [{
+                                        "targets": [2], // Índice de la columna "Código de Credencial"
+                                        "orderable": true // Asegura que la columna sea ordenable
+                                    }],
                                 }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
                             });
                         </script>
@@ -131,16 +138,18 @@
     <style>
         .glowing-button {
             display: inline-block;
-            padding: 8px 16px;
-            font-size: 14px;
+            padding: 8px 8px;
+            font-size: 12px;
             font-weight: bold;
             text-decoration: none;
             text-align: center;
-            border-radius: 4px;
+            border-radius: 8px;
             color: #fff;
-            background-color: #3a6896;/* Celeste oscuro */
+            background-color: #3a6896;
+            /* Celeste oscuro */
             border: none;
-            box-shadow: 0 0 20px #3a6896;/* Sombra del efecto glowing */
+            box-shadow: 0 0 20px #3a6896;
+            /* Sombra del efecto glowing */
 
             /* Animación de brillo */
             animation: glowing 1.5s infinite;
@@ -150,8 +159,10 @@
         }
 
         .glowing-button:hover {
-            background-color: #1f4b77;/* Cambia el color al pasar el mouse */
-            box-shadow: 0 0 20px #1f4b77;/* Cambia la sombra al pasar el mouse */
+            background-color: #1f4b77;
+            /* Cambia el color al pasar el mouse */
+            box-shadow: 0 0 20px #1f4b77;
+            /* Cambia la sombra al pasar el mouse */
         }
 
         /* Animación de brillo */

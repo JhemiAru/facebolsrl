@@ -1,5 +1,7 @@
 @php
     use Illuminate\Support\Facades\Session;
+    use Illuminate\Support\Facades\Auth;
+
 @endphp
 @extends('layouts.admin')
 
@@ -36,14 +38,25 @@
                                 @foreach ($usuarios as $usuario)
                                     <tr>
                                         <td>{{ ++$contador }}</td>
-                                        <td>{{ $usuario->inscripciones->informacion->apellido_paterno }} {{ $usuario->inscripciones->informacion->apellido_materno }} {{ $usuario->inscripciones->informacion->nombre }}</td>
+                                        {{-- <td>{{ $usuario->inscripciones->informacion->apellido_paterno }} {{ $usuario->inscripciones->informacion->apellido_materno }} {{ $usuario->inscripciones->informacion->nombre }}</td> --}}
+                                        <td>
+                                            @if($usuario->inscripciones && $usuario->inscripciones->informacion)
+                                                {{ $usuario->inscripciones->informacion->nombre }}
+                                                {{ $usuario->inscripciones->informacion->apellido_paterno }}
+                                                {{ $usuario->inscripciones->informacion->apellido_materno }}
+                                            @else
+                                                <span class="text-muted">Sin datos</span>
+                                            @endif
+                                        </td>
                                         <td>{{ $usuario->email }}</td>
                                         {{-- <td>{{ $usuario->roles }}</td> --}}
                                         <td style="text-align: center">
-                                            @if ( $usuario->roles->name == true)
-                                                <span class="badge badge-info">{{ $usuario->roles->name }}</span>
+                                            @if (!$usuario->getRoleNames()->isEmpty())
+                                                @foreach ($usuario->getRoleNames() as $rol)
+                                                    <span class="badge badge-info">{{ $rol }}</span>
+                                                @endforeach
                                             @else
-                                                <span class="badge badge-danger">No asignado</span>
+                                                <span class="badge badge-danger">Sin asignar</span>
                                             @endif
                                         </td>
                                         <td style="text-align: center">
@@ -51,7 +64,7 @@
                                                 <i class="fa fa-user-secret"></i>
                                             </a> --}}
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ url('usuarios', $usuario->id) }}" type="button" class="btn btn-info">
+                                                <a href="{{ url('usuarios', $usuario->id) }}" type="button" class="btn btn-primary">
                                                     <i class="bi bi-eye"></i>
                                                 </a>
                                                 {{-- <button type="button" class="btn btn-success" data-toggle="modal" data-target="#updateUserModal" data-id="{{ $usuario->id }}" data-name="{{ $usuario->name }}" data-email="{{ $usuario->email }}">
@@ -121,6 +134,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
 

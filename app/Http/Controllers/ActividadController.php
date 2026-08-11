@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\actividad;
+use App\Models\Actividad;
 use App\Models\Sigla;
 use Illuminate\Console\Signals;
 use Illuminate\Http\Request;
@@ -18,7 +18,7 @@ class ActividadController extends Controller
      */
     public function index()
     {
-        $actividads = actividad::all();
+        $actividads = Actividad::all();
         return view('actividads.index', compact('actividads'));
     }
 

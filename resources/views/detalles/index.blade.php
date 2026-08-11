@@ -49,7 +49,7 @@
 
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ url('detalles', $detalle->id) }}" type="button" class="btn btn-info"><i class="bi bi-eye"></i></a>
+                                                <a href="{{ url('detalles', $detalle->id) }}" type="button" class="btn btn-primary"><i class="bi bi-eye"></i></a>
                                                 <a href="{{ route('detalles.edit', $detalle->id) }}" type="button" class="btn btn-success"><i class="bi bi-pencil"></i></a>
                                                 <form action="{{ url('detalles', $detalle->id) }}" method="POST">
                                                     @csrf
@@ -73,12 +73,12 @@
                                     "pageLength": 10,
                                     "language": {
                                         "emptyTable": "No hay información",
-                                        "info": "Mostrando _START_ a _END_ de _TOTAL_ Áreas",
-                                        "infoEmpty": "Mostrando 0 a 0 de 0 Áreas",
-                                        "infoFiltered": "(Filtrado de _MAX_ total Áreas)",
+                                        "info": "Mostrando _START_ a _END_ de _TOTAL_ Detalle",
+                                        "infoEmpty": "Mostrando 0 a 0 de 0 Detalle",
+                                        "infoFiltered": "(Filtrado de _MAX_ total Detalle)",
                                         "infoPostFix": "",
                                         "thousands": ",",
-                                        "lengthMenu": "Mostrar _MENU_ Áreas",
+                                        "lengthMenu": "Mostrar _MENU_ Detalle",
                                         "loadingRecords": "Cargando...",
                                         "processing": "Procesando...",
                                         "search": "Buscador:",

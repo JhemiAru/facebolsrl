@@ -19,17 +19,16 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-outline card-primary">
-                    {{-- <div class="card-header">
-                        <h3 class="card-title"><b>Áreas Registrados</b></h3>
+                    <div class="card-header">
                         <div class="card-tools">
                             <a href="{{ url('/certificados/create') }}" class="btn btn-primary">
-                                <i class="bi bi-file-plus"></i> Agregar nuevo certificado
+                                <i class="bi bi-file-plus"></i> Agregar Nuevo Certificado
                             </a>
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="card-body" style="...">
 
-                        <table id="example1" class="table table-bordered table-striped table-m text-center">
+                        <table id="example1" class="table table-bordered table-striped table-m">
                             <thead>
                                 <tr>
                                     <th>Nro</th>
@@ -57,13 +56,12 @@
                                         <td>{{ $certificado->fecha_entrega }}</td>
                                         <td>{{ $certificado->detalle->programa->programa }}</td>
                                         <td>{{ $certificado->inscripcion->informacion->nombre }} {{ $certificado->inscripcion->informacion->apellido_materno }} {{ $certificado->inscripcion->informacion->apellido_paterno }}</td>
-
-
                                         <td style="text-align: center">
                                             <div class="btn-group" role="group" aria-label="Basic example">
-                                                <a href="{{ url('certificados', $certificado->id) }}" type="button" class="btn btn-info"><i class="bi bi-eye"></i></a>
+                                                {{-- <a href="{{ url('certificados', $certificado->id) }}" type="button" class="btn btn-primary"><i class="bi bi-eye"></i></a> --}}
                                                 <a href="{{ route('certificados.edit', $certificado->id) }}" type="button" class="btn btn-success"><i class="bi bi-pencil"></i></a>
-                                                <a class="btn btn-sm btn-info" target="_blank"  href="{{ url('certificadopdf',$certificado->id) }}"><i class="fa fa-file-pdf"></i></a>
+                                                <a class="btn btn-sm btn-danger" target="_blank"  href="{{ url('certificadopdf',$certificado->id) }}"><i class="fa fa-file-pdf"></i></a>
+                                                <a class="btn btn-sm btn-info" target="_blank" href="{{ route('certificadoword', $certificado->id) }}"><i class="fa fa-file-word"></i></a>
                                                 <form action="{{ url('certificados', $certificado->id) }}" method="POST">
                                                     @csrf
                                                     {{ method_field('DELETE') }}
@@ -75,8 +73,6 @@
 
                                         </td>
                                     </tr>
-                                    {{-- <h1>{{ $miembro->nombre_apellido }}</h1>
-                                    <h1>{{ $miembro->email }}</h1> --}}
                                 @endforeach
                             </tbody>
                         </table>
