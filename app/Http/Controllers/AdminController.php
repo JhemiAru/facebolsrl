@@ -17,6 +17,18 @@ class AdminController extends Controller
 {
     public function index()
     {
+        $user = auth()->user();
+
+        // Redirigir a pasantes y usuarios regulares directamente a su panel de asistencia
+        if ($user->email !== 'administrativa@facebolsrl.net' && $user->rol !== 'Super Administrador') {
+            if ($user->codigo_credencial) {
+                $inscripcion = \App\Models\Inscripcion::where('codigo_credencial', $user->codigo_credencial)->first();
+                if ($inscripcion) {
+                    return redirect()->route('asistencias.show', $inscripcion->id);
+                }
+            }
+        }
+
         // Consultas existentes (mantener igual)
         $usuarios = User::all();
         $informacions = Informacion::all();

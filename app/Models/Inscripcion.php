@@ -63,6 +63,11 @@ class Inscripcion extends Model
         return $this->hasMany('App\Models\Inscrip_reporte', 'id_inscripcion');
     }
 
+    public function puntos()
+    {
+        return $this->hasMany('App\Models\Punto', 'id_inscripcion', 'id');
+    }
+
     // En App\Models\Inscripcion
 public function programa()
 {

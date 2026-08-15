@@ -44,7 +44,7 @@ class AsistenciaController extends Controller
         return view('asistencias.index', compact('inscripcions'));
     }
 
-    public function pdf()
+    public function pdf($id = null)
     {
         /* $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML('<h1>Test</h1>');
@@ -65,15 +65,31 @@ class AsistenciaController extends Controller
         return $pdf->stream(); */
         //return view('asistencias.pdf');
 
-        $codigo = Auth::user()->codigo_credencial;
-
-        // Suponiendo que la tabla `inscripcions` tiene `codigo_credencial`
-        $inscripcion = Inscripcion::where('codigo_credencial', $codigo)->first();
+        if ($id) {
+            $inscripcion = Inscripcion::find($id);
+        } else {
+            $codigo = Auth::user()->codigo_credencial;
+            $inscripcion = Inscripcion::where('codigo_credencial', $codigo)->first();
+        }
         
         if ($inscripcion) {
             $asistencias = Asistencia::where('id_inscripcion', $inscripcion->id)->get();
+            
+            // Calcular total de horas base
+            $horaacumulada = Asistencia::select(\Illuminate\Support\Facades\DB::raw('SEC_TO_TIME(SUM(TIME_TO_SEC(horas))) AS total_horas'))
+                ->where('id_inscripcion', $inscripcion->id)
+                ->first();
+            $totales_horas = $horaacumulada->total_horas ?? '00:00:00';
+            
+            // Reemplazar con el total calculado que incluye extras/descuentos si existe
+            if (class_exists('\App\Models\TotalHora')) {
+                $totalHora = \App\Models\TotalHora::where('id_inscripcion', $inscripcion->id)->first();
+                if ($totalHora && $totalHora->total_horas) {
+                    $totales_horas = $totalHora->total_horas;
+                }
+            }
         
-            $pdf = Pdf::loadView('asistencias.pdf', compact('asistencias'))->setPaper('a4', 'landscape');;
+            $pdf = Pdf::loadView('asistencias.pdf', compact('asistencias', 'inscripcion', 'totales_horas'))->setPaper('a4', 'landscape');
             return $pdf->stream();
         } else {
             abort(404, 'No se encontró inscripción para este usuario');

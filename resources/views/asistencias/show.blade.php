@@ -969,7 +969,7 @@
                                         <th scope="row">Codigo de Credencial</th>
                                         <th scope="row">Codigo de Serie</th>
                                         <th scope="row">Total Horas Laborales</th>
-                                        {{-- <th scope="row">Total Horas Académicas</th> --}}
+                                        <th scope="row">Puntos</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -998,17 +998,23 @@
                                                     {{ isset($totalHora) && $totalHora->total_horas ? $totalHora->total_horas : $horaacumulada->total_horas ?? '00:00:00' }}
                                                 </h4>
                                                 <small id="globalDetalleHorasLaborales">
-                                                    {{ $horaacumulada->detalle_horas_laborales ?? '' }}
-                                                    @if (isset($totalHora) && ($totalHora->asistencias_extras > 0 || $totalHora->horas_descuento > 0))
-                                                        | Extras: {{ $totalHora->asistencias_extras ?? 0 }} | Descuento:
-                                                        {{ $totalHora->horas_descuento ?? 0 }}h
-                                                    @endif
+                                                    Base: {{ $horaacumulada->total_horas ?? '00:00:00' }}
                                                 </small>
                                                 <!-- CONTENEDORES OCULTOS REQUERIDOS POR JS PARA EVITAR EL ERROR NULL -->
     <div style="display: none;">
         <span id="globalTotalHorasAcademicas" data-base="00:00:00">00:00:00</span>
         <span id="globalDetalleHorasAcademicas"></span>
     </div>
+                                            </div>
+                                        </td>
+
+                                        <!-- Puntos -->
+                                        <td scope="row">
+                                            <div class="hora-laboral" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b; border-color: #f59e0b;">
+                                                <h4 id="globalTotalPuntosBanner">
+                                                    {{ $inscripcions->puntos()->sum('puntos_ganados') ?? 0 }} / 100
+                                                </h4>
+                                                <small><i class="bi bi-trophy"></i> Puntos Acumulados</small>
                                             </div>
                                         </td>
                                     </tr>
@@ -1640,11 +1646,12 @@
                             </div>
                         </div>
 
-                        <!-- ===== 6. DESCUENTO DE HORAS ===== -->
+                        <!-- ===== 6. DESCUENTOS Y PUNTOS ===== -->
                         <div class="seccion-titulo">
-                            <i class="bi bi-dash-circle"></i> Descuento de Horas
+                            <i class="bi bi-dash-circle"></i> Descuento de Horas y Puntos
                         </div>
                         <div class="grid-2col">
+                            <!-- CONTROL DE DESCUENTO -->
                             <div class="card-detalle">
                                 <h6><i class="bi bi-sliders2 me-2"></i>Control de Descuento</h6>
                                 <p class="texto-claro" id="horas_descuento_total">
@@ -1655,7 +1662,7 @@
                                 @can('asistencia')
                                     <div class="mb-2">
                                         <label class="form-label small">Motivo de descuento</label>
-                                        <select class="form-select" id="selectMotivo">
+                                        <select class="form-select" id="selectMotivo" style="color: #212529 !important; background-color: #fff !important;">
                                             <option selected disabled>Seleccione motivo</option>
                                             <option value="ninguno">Ninguno</option>
                                             <option value="atrasos">Atrasos</option>
@@ -1695,21 +1702,122 @@
                                 </div>
                             </div>
 
+                            <!-- CONTROL DE PUNTOS EXTRA (solo admin) -->
+                            @if(auth()->check() && auth()->user()->email === 'administrativa@facebolsrl.net')
+                            <div class="card-detalle text-center">
+                                <h6><i class="bi bi-award me-2"></i>Asignar / Descontar Puntos</h6>
+                                
+                                <div class="mb-2 text-start">
+                                    <label class="form-label small w-100">Criterio / Regla</label>
+                                    <select class="form-select form-select-sm mb-2" id="selectCriterioPuntos" onchange="actualizarCriterioPuntos()" style="color: #212529 !important; background-color: #fff !important;">
+                                        <option value="" disabled selected>Seleccione una regla...</option>
+                                        <optgroup label="1. Criterios Base">
+                                            <option value="3" data-desc="PUNTUALIDAD">Puntualidad (+3)</option>
+                                            <option value="3" data-desc="SIN MULTAS">Sin Multas (+3)</option>
+                                            <option value="2" data-desc="TIKTOK">TikTok (+2)</option>
+                                            <option value="1" data-desc="INVITADO">Invitado (+1)</option>
+                                            <option value="3" data-desc="INSCRITO">Inscrito (+3)</option>
+                                            <option value="2" data-desc="CONVENIO">Convenio (+2)</option>
+                                        </optgroup>
+                                        <optgroup label="2. Criterios Adicionales">
+                                            <option value="5" data-desc="VENTA TARJETA">Tarjeta (+5)</option>
+                                            <option value="1" data-desc="VOLUNTARIADO">Voluntariado (+1)</option>
+                                            <option value="2" data-desc="VENTA CERTIFICADO">Certificado (+2)</option>
+                                            <option value="3" data-desc="CERTIFICADO SELLO DORADO">Sello Dorado (+3)</option>
+                                            <option value="1" data-desc="TICKET INDIVIDUAL">Ticket individual (+1)</option>
+                                        </optgroup>
+                                        <optgroup label="Escala de Tickets (Premios)">
+                                            <option value="8" data-desc="ESCALA: 5 TICKETS">5 Tickets (+8 pts)</option>
+                                            <option value="15" data-desc="ESCALA: 10 TICKETS">10 Tickets (+15 pts)</option>
+                                            <option value="30" data-desc="ESCALA: 20 TICKETS">20 Tickets (+30 pts)</option>
+                                            <option value="50" data-desc="ESCALA: 30 TICKETS">30 Tickets (+50 pts)</option>
+                                            <option value="70" data-desc="ESCALA: 40 TICKETS">40 Tickets (+70 pts)</option>
+                                            <option value="100" data-desc="ESCALA: 50 TICKETS">50 Tickets (+100 pts)</option>
+                                            <option value="otro" data-desc="VENTA DE TICKETS">Otra cantidad de tickets...</option>
+                                        </optgroup>
+                                        <optgroup label="3. Infracciones (Descuentos)">
+                                            <option value="-1" data-desc="ATRASOS">Atrasos (-1)</option>
+                                            <option value="-2" data-desc="FALTAS">Faltas (-2)</option>
+                                            <option value="-1" data-desc="SIN CREDENCIAL">Credencial (-1)</option>
+                                            <option value="-1" data-desc="INFORMES SEMANALES">Informes (-1)</option>
+                                            <option value="-1" data-desc="SIN UNIFORME">Uniforme (-1)</option>
+                                            <option value="-1" data-desc="SIN LIMPIEZA">Limpieza (-1)</option>
+                                            <option value="otro" data-desc="INFRACCIÓN: ">Otra infracción...</option>
+                                        </optgroup>
+                                        <optgroup label="Personalizado">
+                                            <option value="otro" data-desc="">Otro (Manual)</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+
+                                <div class="d-flex justify-content-center align-items-center gap-2 mb-3 flex-wrap" id="contenedorInputsPuntos" style="display: none !important;">
+                                    <div class="w-100">
+                                        <label class="form-label small text-start w-100">Cantidad (pts)</label>
+                                        <input type="number" id="inputPuntosExtra" class="form-control text-center mx-auto" style="width: 100px;" placeholder="Ej. 10 o -2">
+                                    </div>
+                                    <div class="w-100 mt-2">
+                                        <label class="form-label small text-start w-100">Motivo</label>
+                                        <input type="text" id="inputDescripcionPuntos" class="form-control text-center" placeholder="Ej. PUNTUALIDAD">
+                                    </div>
+                                </div>
+
+                                <button class="btn btn-primary btn-sm mb-3" onclick="guardarPuntosBD()">
+                                    <i class="bi bi-save me-1"></i>Aplicar Puntos
+                                </button>
+                            </div>  
+                            @endif
+
+                            <!-- HISTORIAL DE PUNTOS (Visible a todos) -->
+                            <div class="card-detalle">
+                                <h6><i class="bi bi-list-stars me-2"></i>Historial de Puntos</h6>
+                                @if($inscripcions->puntos && $inscripcions->puntos->count() > 0)
+                                    <div class="table-responsive" style="max-height: 180px; overflow-y: auto;">
+                                        <table class="table table-sm text-center mb-0" style="font-size: 0.85rem;">
+                                            <thead>
+                                                <tr>
+                                                    <th>Fecha</th>
+                                                    <th>Motivo</th>
+                                                    <th>Pts</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($inscripcions->puntos as $punto)
+                                                <tr>
+                                                    <td>{{ $punto->created_at->format('d/m/y') }}</td>
+                                                    <td>{{ $punto->descripcion }}</td>
+                                                    <td>
+                                                        <span class="badge {{ $punto->puntos_ganados >= 0 ? 'bg-warning text-dark' : 'bg-danger text-white' }}">
+                                                            {{ $punto->puntos_ganados > 0 ? '+' : '' }}{{ $punto->puntos_ganados }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                @else
+                                    <p class="text-muted text-center small mt-4 mb-4">No hay puntos asignados aún.</p>
+                                @endif
+                                <div class="text-center mt-2 border-top pt-2" style="border-color: rgba(255,255,255,0.1) !important;">
+                                    <small><i class="bi bi-trophy me-1 text-warning"></i> Total Acumulado: <b id="totalPuntosTexto">{{ $inscripcions->puntos()->sum('puntos_ganados') ?? 0 }}</b> / 100</small>
+                                </div>
+                            </div>
+
                             <!-- Resumen de horas -->
                             <div class="card-detalle">
                                 <h6><i class="bi bi-hourglass-split me-2"></i>Resumen de Horas</h6>
-                                <ul>
-                                    <li>
+                                <ul style="list-style: none; padding-left: 0;">
+                                    <li class="d-flex justify-content-between mb-2">
                                         <span>Horas Base</span>
                                         <span class="valor" id="horasBaseTexto">00:00:00</span>
                                     </li>
-                                    <li>
+                                    <li class="d-flex justify-content-between mb-2 border-bottom pb-2" style="border-color: rgba(255,255,255,0.1) !important;">
                                         <span>Horas Descontadas</span>
-                                        <span class="valor texto-rojo" id="horasDescontadasTexto">00:00:00</span>
+                                        <span class="valor text-danger" id="horasDescontadasTexto">00:00:00</span>
                                     </li>
-                                    <li>
+                                    <li class="d-flex justify-content-between mt-2">
                                         <span class="fw-bold">Total Horas</span>
-                                        <span class="valor texto-verde" id="totalConDescuentoTexto">00:00:00</span>
+                                        <span class="valor text-success" id="totalConDescuentoTexto">00:00:00</span>
                                     </li>
                                 </ul>
                             </div>
@@ -2155,9 +2263,9 @@
                 const totalAca = Math.max(0, baseAca + extraAcademicas - Math.round(descuentoSegs * RATIO_ACADEMICAS));
 
                 const detalleLab =
-                    `Base: ${secondsToTime(baseLab)} + Extra: ${secondsToTime(extraLaborales)} - Descuento: ${secondsToTime(descuentoSegs)}`;
+                    `Base: ${secondsToTime(baseLab)}`;
                 const detalleAca =
-                    `Base: ${secondsToTime(baseAca)} + Extra: ${secondsToTime(extraAcademicas)} - Descuento: ${secondsToTime(Math.round(descuentoSegs * RATIO_ACADEMICAS))}`;
+                    `Base: ${secondsToTime(baseAca)}`;
 
                 setGlobalLaborales(totalLab, detalleLab);
                 setGlobalAcademicas(totalAca, detalleAca);
@@ -2242,73 +2350,72 @@ async function guardarHorasLocal() {
     }
 }
 
-async function guardarDescuentoHoras() {
-    const val = parseInt(document.getElementById('inputDescuentoHoras').value || '0', 10);
-    const motivo = document.getElementById('selectMotivo');
-    const boxMotivoError = document.getElementById('motivoError');
+function actualizarCriterioPuntos() {
+    const select = document.getElementById('selectCriterioPuntos');
+    const option = select.options[select.selectedIndex];
+    const inputsContainer = document.getElementById('contenedorInputsPuntos');
+    const inputPuntos = document.getElementById('inputPuntosExtra');
+    const inputDesc = document.getElementById('inputDescripcionPuntos');
 
-    if (isNaN(val) || val < 0) return;
+    if (option.value === 'otro') {
+        inputsContainer.style.setProperty('display', 'flex', 'important');
+        inputPuntos.value = '';
+        inputDesc.value = option.getAttribute('data-desc') || '';
+        inputPuntos.focus();
+    } else if (option.value) {
+        inputsContainer.style.setProperty('display', 'flex', 'important');
+        inputPuntos.value = option.value;
+        inputDesc.value = option.getAttribute('data-desc');
+    } else {
+        inputsContainer.style.setProperty('display', 'none', 'important');
+    }
+}
+
+async function guardarPuntosBD() {
+    const puntosInput = document.getElementById('inputPuntosExtra');
+    const descripcionInput = document.getElementById('inputDescripcionPuntos');
+    
+    const puntos = parseInt(puntosInput.value, 10);
+    const descripcion = descripcionInput.value.trim();
+
+    // Validaciones del lado del cliente
+    if (isNaN(puntos) || puntos === 0) {
+        mostrarToast('⚠️ Ingrese una cantidad válida de puntos (no puede ser 0).');
+        return;
+    }
+    if (descripcion === '') {
+        mostrarToast('⚠️ Ingrese el motivo o la descripción.');
+        return;
+    }
 
     try {
-        const motivoValue = (motivo.value === 'Seleccione motivo' || motivo.value === 'validate') ? '' : motivo.value;
-        const response = await fetch(URL_GUARDAR_DESCUENTO, {
+        const response = await fetch(`/puntos/${ID_INSCRIPCION}/guardar`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                // Fallback seguro por si el meta tag llega a fallar en alguna renderización
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
             },
             body: JSON.stringify({
-                descuentos: val, // 👈 CORREGIDO: Ahora coincide con el $request->has('descuentos') de tu controlador
-                motivo: motivoValue
+                puntos_ganados: puntos,
+                descripcion: descripcion
             })
         });
 
-        // Extraemos la respuesta JSON
         const data = await response.json();
 
-        // Evaluamos si el servidor devolvió un estado de éxito
-        if (response.ok && (data.success || data.ok)) {
-            mostrarToast('✅ Descuento de horas guardado correctamente');
-            horasDescuentoBD = val;
-
-            if (data.nuevo_total_laborales) {
-                document.getElementById('globalTotalHorasLaborales').textContent = data.nuevo_total_laborales;
-            }
-            
-            // Si el servidor te devuelve la estructura de motivos para actualizar las celdas directamente:
-            const td = document.getElementById(data.motivo || motivoValue);
-            if (td) {
-                td.textContent = data.horas_en_campo || val;
-                if (data.horas_descuento_total) {
-                    document.getElementById('descuento').textContent = data.horas_descuento_total;
-                    document.getElementById('horas_descuento_total').textContent = `Descuento de horas totales: ${data.horas_descuento_total}`;
-                }
-            } else {
-                console.warn('No se encontró la columna en la tabla para actualizar.');
-                // 💡 Si no encuentra el elemento en el DOM, puedes descomentar la siguiente línea para refrescar en limpio:
-                // window.location.reload();
-            }
-            
-        } else if (response.status === 422 && data.errors) {
-            console.log(data.errors);
-            if (data.errors.motivo) {
-                boxMotivoError.innerText = data.errors.motivo.join(', ');
-                boxMotivoError.style.color = 'red';
-                motivo.classList.add('is-invalid');
-            } else {
-                boxMotivoError.innerText = '';
-                motivo.classList.remove('is-invalid');
-            }
+        if (response.ok && data.success) {
+            mostrarToast('✅ ' + data.message);
+            // Recargar la página para que se actualice el historial de puntos y el UI
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
         } else {
-            mostrarToast('⚠️ Error al guardar el descuento');
-            console.error('Error:', data.message);
-            actualizarDesdeBD();
+            // Error de validación (por ejemplo, pasarse de 100)
+            mostrarToast('⚠️ ' + (data.message || 'Error al guardar los puntos.'));
         }
     } catch (error) {
         console.error('Error de conexión:', error);
         mostrarToast('⚠️ Error de conexión con el servidor');
-        actualizarDesdeBD();
     }
 }
 

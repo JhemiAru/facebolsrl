@@ -58,14 +58,14 @@ Route::get('/informaciones/pdf', [App\Http\Controllers\InformacionController::cl
 Route::get('/inscripciones/pdf', [App\Http\Controllers\InscripcionController::class, 'pdf'])->name('inscripciones.pdf');
 Route::get('/inscripciones/pdf_fechas', [App\Http\Controllers\InscripcionController::class, 'pdf_fechas'])/* ->name('inscripciones.pdf') */;
 /* Reporte de Asistencia */
-Route::get('/asistencias/pdf', [App\Http\Controllers\AsistenciaController::class, 'pdf'])->name('asistencias.pdf');
+Route::get('/asistencias/pdf/{id?}', [App\Http\Controllers\AsistenciaController::class, 'pdf'])->name('asistencias.pdf');
 
 /* Route::get('/informaciones', [App\Http\Controllers\InformacionController::class, 'store'])->name('informaciones.store'); */
 
 Route::resource('/informaciones', \App\Http\Controllers\InformacionController::class)->middleware('can:informaciones');
 
 Route::resource('/inscripciones', \App\Http\Controllers\InscripcionController::class)->middleware('can:inscripciones');
-
+Route::post('/puntos/{id}/guardar', [App\Http\Controllers\PuntoController::class, 'guardarPuntos'])->name('puntos.guardar');
 Route::resource('/reportes', \App\Http\Controllers\ReporteController::class);
 Route::get('/reportes/{reporte}', [\App\Http\Controllers\ReporteController::class, 'show'])->name('reportes.show');
 
@@ -115,7 +115,9 @@ Route::get('/reporteactividad', [ReporteActividadController::class, 'reporteacti
 Route::post('/guardar-actividad', [ReporteActividadController::class, 'guardarActividad'])->name('guardarActividad');
 // Mostrar el formulario de edición
 Route::get('/editar-actividad/{id}', [ReporteActividadController::class, 'editarActividad'])->name('editarActividad');
-//Route::get('/reporteactividad/details/{id}', [ReporteActividadController::class, 'details'])->name('reporteactividad.details');
+
+// Generar PDF del reporte
+Route::get('/reporteactividad/{id}/pdf', [ReporteActividadController::class, 'generarPdf'])->name('reporteactividad.pdf');
 
 // Guardar los cambios en la base de datos
 Route::put('/reporteactividad/{id}', [ReporteActividadController::class, 'actualizarActividad'])->name('reporteactividad.actualizar');
