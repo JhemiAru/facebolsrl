@@ -998,7 +998,7 @@
                                                     {{ isset($totalHora) && $totalHora->total_horas ? $totalHora->total_horas : $horaacumulada->total_horas ?? '00:00:00' }}
                                                 </h4>
                                                 <small id="globalDetalleHorasLaborales">
-                                                    Base: {{ $horaacumulada->total_horas ?? '00:00:00' }}
+                                                    Base: {{ $horaacumulada->total_horas ?? '00:00:00' }} | Horas Extra: 00:00:00 | Descuento de Horas: 00:00:00
                                                 </small>
                                                 <!-- CONTENEDORES OCULTOS REQUERIDOS POR JS PARA EVITAR EL ERROR NULL -->
     <div style="display: none;">
@@ -1014,7 +1014,8 @@
                                                 <h4 id="globalTotalPuntosBanner">
                                                     {{ $inscripcions->puntos()->sum('puntos_ganados') ?? 0 }} / 100
                                                 </h4>
-                                                <small><i class="bi bi-trophy"></i> Puntos Acumulados</small>
+                                                <small><i class="bi bi-trophy"></i> Puntos Acumulados</small><br>
+                                                <small>Puntos Extra: 0 | Descuento de Puntos: 0</small>
                                             </div>
                                         </td>
                                     </tr>
@@ -2263,7 +2264,7 @@
                 const totalAca = Math.max(0, baseAca + extraAcademicas - Math.round(descuentoSegs * RATIO_ACADEMICAS));
 
                 const detalleLab =
-                    `Base: ${secondsToTime(baseLab)}`;
+                    `Base: ${secondsToTime(baseLab)} | Horas Extra: ${secondsToTime(extraLaborales)} | Descuento de Horas: ${secondsToTime(descuentoSegs)}`;
                 const detalleAca =
                     `Base: ${secondsToTime(baseAca)}`;
 
