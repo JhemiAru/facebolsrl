@@ -385,7 +385,7 @@
                 /* Cabecera más pequeña */
             }
 
-            .btn {
+            .btn:not(.btn-inline) {
                 width: 100%;
                 /* Botones de ancho completo en móviles */
                 margin-bottom: 5px;
@@ -410,6 +410,32 @@
                 /* Menos padding en móviles */
                 font-size: 0.75rem;
                 /* Texto más pequeño */
+            }
+
+            /* Fix para DataTables pagination en móviles */
+            .dataTables_wrapper .row {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .dataTables_info {
+                text-align: center !important;
+                margin-bottom: 10px;
+                white-space: normal !important;
+            }
+            .dataTables_paginate {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                justify-content: center !important;
+                margin-top: 10px !important;
+            }
+            .dataTables_paginate .pagination {
+                flex-wrap: wrap !important;
+                justify-content: center !important;
+                gap: 5px;
+            }
+            .paginate_button {
+                margin: 2px !important;
             }
         }
 
@@ -959,9 +985,9 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card card-outline card-primary">
-                    <div class="table-responsive">
-                        <div class="card-header">
-                            <!-- ===== TABLA INFORMACIÓN PERSONAL ===== -->
+                    <div class="card-header">
+                        <!-- ===== TABLA INFORMACIÓN PERSONAL ===== -->
+                        <div class="table-responsive">
                             <table class="table table-bordered table-striped table-m text-center">
                                 <thead class="thead-custom">
                                     <tr>
@@ -1015,15 +1041,20 @@
                                                     {{ $inscripcions->puntos()->sum('puntos_ganados') ?? 0 }}
                                                 </h4>
                                                 <small><i class="bi bi-trophy"></i> Puntos Acumulados</small><br>
-                                                <small>Puntos Extra: 0 | Descuento de Puntos: 0</small>
+                                                @php
+                                                    $pExtra = $inscripcions->puntos->where('puntos_ganados', '>', 0)->sum('puntos_ganados');
+                                                    $pDesc = abs($inscripcions->puntos->where('puntos_ganados', '<', 0)->sum('puntos_ganados'));
+                                                @endphp
+                                                <small>Puntos Extra: {{ $pExtra }} | Descuento de Puntos: {{ $pDesc }}</small>
                                             </div>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
 
-                            <!-- ===== BOTONES DE ACCIÓN ===== -->
-                            <div class="card-tools">
+                        <!-- ===== BOTONES DE ACCIÓN ===== -->
+                        <div class="card-tools">
                                 <a href="{{ route('asistencias.pdf', $inscripcions->id) }}" class="btn btn-warning"
                                     target="_blank">
                                     <i class="bi bi-printer-fill"></i> Imprimir Reporte Asistencia
@@ -1208,7 +1239,6 @@
                                 });
                             </script>
 
-                        </div>
                     </div>
                 </div>
             </div>
@@ -1615,11 +1645,11 @@
 
                                 @can('asistencia')
                                     <div class="d-flex justify-content-center align-items-center gap-3 mb-3">
-                                        <button class="btn btn-sm btn-danger" onclick="cambiarAsistencias(-1)">−</button>
+                                        <button class="btn btn-sm btn-danger btn-inline" onclick="cambiarAsistencias(-1)" style="width: 40px; height: 40px; font-size: 1.2rem; font-weight: bold; border-radius: 8px;">−</button>
                                         <input type="number" id="inputAsistencias" class="form-control text-center"
                                             style="width: 90px; display: inline-block;" min="0"
                                             value="{{ $totalHora->asistencias_extras ?? 0 }}">
-                                        <button class="btn btn-sm btn-success" onclick="cambiarAsistencias(1)">+</button>
+                                        <button class="btn btn-sm btn-success btn-inline" onclick="cambiarAsistencias(1)" style="width: 40px; height: 40px; font-size: 1.2rem; font-weight: bold; border-radius: 8px;">+</button>
                                     </div>
                                     <div class="text-center mb-3">
                                         <button class="btn btn-primary btn-sm" onclick="guardarHorasLocal()">
@@ -1679,11 +1709,11 @@
 
                                 <div class="d-flex justify-content-center align-items-center gap-3 mb-2">
                                     @can('asistencia')
-                                        <button class="btn btn-sm btn-danger" onclick="cambiarDescuentoHoras(-1)">−</button>
+                                        <button class="btn btn-sm btn-danger btn-inline" onclick="cambiarDescuentoHoras(-1)" style="width: 40px; height: 40px; font-size: 1.2rem; font-weight: bold; border-radius: 8px;">−</button>
                                         <input type="number" id="inputDescuentoHoras" class="form-control text-center"
                                             style="width: 90px; display: inline-block;" min="0"
                                             value="{{ $totalHora->horas_descuento ?? 0 }}">
-                                        <button class="btn btn-sm btn-success" onclick="cambiarDescuentoHoras(1)">+</button>
+                                        <button class="btn btn-sm btn-success btn-inline" onclick="cambiarDescuentoHoras(1)" style="width: 40px; height: 40px; font-size: 1.2rem; font-weight: bold; border-radius: 8px;">+</button>
                                     @else
                                         <input type="number" id="inputDescuentoHoras" class="form-control text-center"
                                             style="width: 90px; display: inline-block;" min="0"
@@ -1737,13 +1767,13 @@
                                             <option value="otro" data-desc="VENTA DE TICKETS">Otra cantidad de tickets...</option>
                                         </optgroup>
                                         <optgroup label="3. Infracciones (Descuentos)">
-                                            <option value="-1" data-desc="ATRASOS">Atrasos (-1)</option>
-                                            <option value="-2" data-desc="FALTAS">Faltas (-2)</option>
-                                            <option value="-1" data-desc="SIN CREDENCIAL">Credencial (-1)</option>
-                                            <option value="-1" data-desc="INFORMES SEMANALES">Informes (-1)</option>
-                                            <option value="-1" data-desc="SIN UNIFORME">Uniforme (-1)</option>
-                                            <option value="-1" data-desc="SIN LIMPIEZA">Limpieza (-1)</option>
-                                            <option value="otro" data-desc="INFRACCIÓN: ">Otra infracción...</option>
+                                            <option value="-1" data-desc="ATRASOS" data-tipo="descuento">Atrasos (-1)</option>
+                                            <option value="-2" data-desc="FALTAS" data-tipo="descuento">Faltas (-2)</option>
+                                            <option value="-1" data-desc="SIN CREDENCIAL" data-tipo="descuento">Credencial (-1)</option>
+                                            <option value="-1" data-desc="INFORMES SEMANALES" data-tipo="descuento">Informes (-1)</option>
+                                            <option value="-1" data-desc="SIN UNIFORME" data-tipo="descuento">Uniforme (-1)</option>
+                                            <option value="-1" data-desc="SIN LIMPIEZA" data-tipo="descuento">Limpieza (-1)</option>
+                                            <option value="otro" data-desc="INFRACCIÓN: " data-tipo="descuento">Otra infracción...</option>
                                         </optgroup>
                                         <optgroup label="Personalizado">
                                             <option value="otro" data-desc="">Otro (Manual)</option>
@@ -1755,9 +1785,9 @@
                                     <div class="w-100">
                                         <label class="form-label small text-start w-100 text-center">Cantidad (pts)</label>
                                         <div class="d-flex justify-content-center align-items-center gap-3">
-                                            <button type="button" class="btn btn-sm btn-danger" onclick="cambiarPuntosExtra(-1)" style="width: 40px; height: 40px; font-size: 1.2rem; font-weight: bold; border-radius: 8px;">−</button>
-                                            <input type="number" id="inputPuntosExtra" class="form-control text-center m-0" style="width: 100px; height: 40px; font-size: 1.2rem;" placeholder="0">
-                                            <button type="button" class="btn btn-sm btn-success" onclick="cambiarPuntosExtra(1)" style="width: 40px; height: 40px; font-size: 1.2rem; font-weight: bold; border-radius: 8px;">+</button>
+                                            <button type="button" class="btn btn-sm btn-danger btn-inline" onclick="cambiarPuntosExtra(-1)" style="width: 40px; height: 40px; font-size: 1.2rem; font-weight: bold; border-radius: 8px;">−</button>
+                                            <input type="number" id="inputPuntosExtra" class="form-control text-center m-0" style="width: 100px; height: 40px; font-size: 1.2rem;" placeholder="0" min="0">
+                                            <button type="button" class="btn btn-sm btn-success btn-inline" onclick="cambiarPuntosExtra(1)" style="width: 40px; height: 40px; font-size: 1.2rem; font-weight: bold; border-radius: 8px;">+</button>
                                         </div>
                                     </div>
                                     <div class="w-100 mt-2">
@@ -1780,6 +1810,9 @@
                                         <table class="table table-sm text-center mb-0" style="font-size: 0.85rem;">
                                             <thead>
                                                 <tr>
+                                                    @if(auth()->check() && auth()->user()->email === 'administrativa@facebolsrl.net')
+                                                    <th><input type="checkbox" id="checkTodosPuntos" style="position: static !important; transform: scale(1.2); cursor: pointer;" onchange="toggleTodosPuntos(this)"></th>
+                                                    @endif
                                                     <th>Fecha</th>
                                                     <th>Motivo</th>
                                                     <th>Pts</th>
@@ -1788,6 +1821,9 @@
                                             <tbody>
                                                 @foreach($inscripcions->puntos as $punto)
                                                 <tr>
+                                                    @if(auth()->check() && auth()->user()->email === 'administrativa@facebolsrl.net')
+                                                    <td class="align-middle"><input type="checkbox" class="check-punto" value="{{ $punto->id }}" style="position: static !important; transform: scale(1.2); cursor: pointer;" onchange="actualizarVisibilidadBotonesPuntos()"></td>
+                                                    @endif
                                                     <td>{{ $punto->created_at->format('d/m/y') }}</td>
                                                     <td>{{ $punto->descripcion }}</td>
                                                     <td>
@@ -1804,8 +1840,15 @@
                                     <p class="text-muted text-center small mt-4 mb-4">No hay puntos asignados aún.</p>
                                 @endif
                                 <div class="text-center mt-2 border-top pt-2" style="border-color: rgba(255,255,255,0.1) !important;">
-                                    <small><i class="bi bi-trophy me-1 text-warning"></i> Total Acumulado: <b id="totalPuntosTexto">{{ $inscripcions->puntos()->sum('puntos_ganados') ?? 0 }}</b> / 100</small>
+                                    <small><i class="bi bi-trophy me-1 text-warning"></i> Total Acumulado: <b id="totalPuntosTexto">{{ $inscripcions->puntos()->sum('puntos_ganados') ?? 0 }}</b></small>
                                 </div>
+                                
+                                @if(auth()->check() && auth()->user()->email === 'administrativa@facebolsrl.net')
+                                <div class="text-center mt-2" id="contenedorAccionesPuntos" style="display: none;">
+                                    <button class="btn btn-sm btn-danger me-2" onclick="eliminarPuntosSeleccionados()"><i class="bi bi-trash"></i> Eliminar</button>
+                                    <button class="btn btn-sm btn-primary" onclick="abrirModalModificarPunto()"><i class="bi bi-pencil"></i> Modificar</button>
+                                </div>
+                                @endif
                             </div>
 
                             <!-- Resumen de horas -->
@@ -1936,6 +1979,34 @@
         </div>
     </div>
 </div>
+
+        <!-- ===== MODAL MODIFICAR PUNTO ===== -->
+        <div class="modal fade" id="modalModificarPunto" tabindex="-1" aria-labelledby="modalModificarPuntoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style="background-color: #1a2233; color: white;">
+                    <div class="modal-header border-bottom border-secondary">
+                        <h5 class="modal-title" id="modalModificarPuntoLabel"><i class="bi bi-pencil me-2"></i>Modificar Punto</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="editPuntoId">
+                        <div class="mb-3">
+                            <label class="form-label small">Motivo</label>
+                            <input type="text" id="editPuntoMotivo" class="form-control" style="background-color: #2a3447; color: white; border: 1px solid #455065;" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small">Cantidad (pts)</label>
+                            <!-- Se pone texto en el input, o un number que permite negativos si era descuento -->
+                            <input type="number" id="editPuntoCantidad" class="form-control" style="background-color: #2a3447; color: white; border: 1px solid #455065;" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top border-secondary">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary btn-sm" onclick="guardarModificacionPunto()">Guardar Cambios</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- ===== MODAL REGISTRO DE INFORME ===== -->
         <div class="modal fade" id="dataModal" tabindex="-1" aria-labelledby="dataModalLabel" aria-hidden="true">
@@ -2355,12 +2426,66 @@ async function guardarHorasLocal() {
     }
 }
 
+async function guardarDescuentoHoras() {
+    const val = parseInt(document.getElementById('inputDescuentoHoras').value || '0', 10);
+    const motivoSelect = document.getElementById('selectMotivo');
+    const motivo = motivoSelect.value;
+    
+    if (isNaN(val) || val < 0) return;
+    if (motivo === 'Seleccione motivo' || !motivo) {
+        motivoSelect.classList.add('is-invalid');
+        document.getElementById('motivoError').innerText = 'Debe seleccionar un motivo';
+        return;
+    }
+
+    try {
+        const response = await fetch(URL_GUARDAR_DESCUENTO, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                descuentos: val,
+                motivo: motivo
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error en el servidor: Código ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.success || data.ok) {
+            mostrarToast('✅ Descuento guardado correctamente');
+            
+            // Recargar la página para actualizar el modal de detalles y los totales
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+            
+        } else {
+            mostrarToast('⚠️ Error al guardar en la base de datos');
+            console.error('Error:', data.message);
+        }
+    } catch (error) {
+        console.error('Error de conexión:', error);
+        mostrarToast('⚠️ Error de conexión con el servidor');
+    }
+}
+
 function actualizarCriterioPuntos() {
     const select = document.getElementById('selectCriterioPuntos');
     const option = select.options[select.selectedIndex];
     const inputsContainer = document.getElementById('contenedorInputsPuntos');
     const inputPuntos = document.getElementById('inputPuntosExtra');
     const inputDesc = document.getElementById('inputDescripcionPuntos');
+
+    inputPuntos.removeAttribute('data-is-descuento');
+    if (option.getAttribute('data-tipo') === 'descuento') {
+        inputPuntos.setAttribute('data-is-descuento', 'true');
+    }
 
     if (option.value === 'otro') {
         inputsContainer.style.setProperty('display', 'flex', 'important');
@@ -2369,7 +2494,8 @@ function actualizarCriterioPuntos() {
         inputPuntos.focus();
     } else if (option.value) {
         inputsContainer.style.setProperty('display', 'flex', 'important');
-        inputPuntos.value = option.value;
+        // Mostrar como valor absoluto para que no salga el signo menos en el input
+        inputPuntos.value = Math.abs(parseInt(option.value, 10));
         inputDesc.value = option.getAttribute('data-desc');
     } else {
         inputsContainer.style.setProperty('display', 'none', 'important');
@@ -2381,6 +2507,7 @@ function cambiarPuntosExtra(delta) {
     let val = parseInt(input.value || '0', 10);
     val = isNaN(val) ? 0 : val;
     val += delta;
+    if (val < 0) val = 0; // Prevenir números negativos en la interfaz
     input.value = val;
 }
 
@@ -2388,7 +2515,7 @@ async function guardarPuntosBD() {
     const puntosInput = document.getElementById('inputPuntosExtra');
     const descripcionInput = document.getElementById('inputDescripcionPuntos');
     
-    const puntos = parseInt(puntosInput.value, 10);
+    let puntos = parseInt(puntosInput.value, 10);
     const descripcion = descripcionInput.value.trim();
 
     // Validaciones del lado del cliente
@@ -2399,6 +2526,11 @@ async function guardarPuntosBD() {
     if (descripcion === '') {
         mostrarToast('⚠️ Ingrese el motivo o la descripción.');
         return;
+    }
+
+    // Convertir a negativo automáticamente si es un descuento (infracción)
+    if (puntosInput.getAttribute('data-is-descuento') === 'true') {
+        puntos = -Math.abs(puntos);
     }
 
     try {
@@ -2429,6 +2561,130 @@ async function guardarPuntosBD() {
     } catch (error) {
         console.error('Error de conexión:', error);
         mostrarToast('⚠️ Error de conexión con el servidor');
+    }
+}
+
+// ====== LÓGICA DE ELIMINACIÓN Y EDICIÓN DE PUNTOS ======
+function toggleTodosPuntos(source) {
+    const checkboxes = document.querySelectorAll('.check-punto');
+    checkboxes.forEach(cb => cb.checked = source.checked);
+    actualizarVisibilidadBotonesPuntos();
+}
+
+function actualizarVisibilidadBotonesPuntos() {
+    const checked = document.querySelectorAll('.check-punto:checked');
+    const container = document.getElementById('contenedorAccionesPuntos');
+    if (container) {
+        if (checked.length > 0) {
+            container.style.display = 'block';
+        } else {
+            container.style.display = 'none';
+        }
+    }
+}
+
+async function eliminarPuntosSeleccionados() {
+    const checked = document.querySelectorAll('.check-punto:checked');
+    if (checked.length === 0) return;
+    
+    if (!confirm('¿Estás seguro de eliminar los puntos seleccionados?')) return;
+
+    const ids = Array.from(checked).map(cb => parseInt(cb.value));
+
+    try {
+        const response = await fetch('/puntos/eliminar', {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ ids: ids })
+        });
+        const data = await response.json();
+        if (data.success) {
+            mostrarToast('✅ ' + data.message);
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            mostrarToast('⚠️ ' + data.message);
+        }
+    } catch (error) {
+        mostrarToast('⚠️ Error al conectar con el servidor.');
+    }
+}
+
+function abrirModalModificarPunto() {
+    const checked = document.querySelectorAll('.check-punto:checked');
+    if (checked.length !== 1) {
+        alert('Por favor seleccione exactamente un registro para modificar.');
+        return;
+    }
+
+    const id = checked[0].value;
+    const row = checked[0].closest('tr');
+    
+    // Indices de columnas: 0=Checkbox, 1=Fecha, 2=Motivo, 3=Pts
+    let motivo = row.cells[2].innerText.trim();
+    let cantidadStr = row.cells[3].innerText.trim();
+    
+    // Quitar el signo + si lo tiene
+    cantidadStr = cantidadStr.replace('+', '');
+    const cantidad = parseInt(cantidadStr, 10);
+
+    document.getElementById('editPuntoId').value = id;
+    document.getElementById('editPuntoMotivo').value = motivo;
+    document.getElementById('editPuntoCantidad').value = Math.abs(cantidad);
+    
+    if (cantidad < 0) {
+        document.getElementById('editPuntoCantidad').setAttribute('data-is-descuento', 'true');
+    } else {
+        document.getElementById('editPuntoCantidad').removeAttribute('data-is-descuento');
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById('modalModificarPunto'));
+    modal.show();
+}
+
+async function guardarModificacionPunto() {
+    const id = document.getElementById('editPuntoId').value;
+    let cantidad = parseInt(document.getElementById('editPuntoCantidad').value, 10);
+    const motivo = document.getElementById('editPuntoMotivo').value.trim();
+
+    if (isNaN(cantidad) || cantidad === 0) {
+        alert('Ingrese una cantidad válida.');
+        return;
+    }
+
+    // Si originalmente era un descuento (negativo), lo mantenemos negativo si es necesario.
+    // Opcionalmente, podemos dejar que el usuario introduzca un número negativo en el input directamente.
+    // Como pusimos Math.abs al mostrar, necesitamos volverlo negativo si era un descuento.
+    const isDescuento = document.getElementById('editPuntoCantidad').getAttribute('data-is-descuento') === 'true';
+    if (isDescuento) {
+        cantidad = -Math.abs(cantidad);
+    } else {
+        cantidad = Math.abs(cantidad);
+    }
+
+    try {
+        const response = await fetch('/puntos/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                puntos_ganados: cantidad,
+                descripcion: motivo
+            })
+        });
+        const data = await response.json();
+        if (data.success) {
+            mostrarToast('✅ ' + data.message);
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            mostrarToast('⚠️ ' + data.message);
+        }
+    } catch (error) {
+        mostrarToast('⚠️ Error al conectar con el servidor.');
     }
 }
 

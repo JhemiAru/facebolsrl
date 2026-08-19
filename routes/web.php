@@ -66,6 +66,8 @@ Route::resource('/informaciones', \App\Http\Controllers\InformacionController::c
 
 Route::resource('/inscripciones', \App\Http\Controllers\InscripcionController::class)->middleware('can:inscripciones');
 Route::post('/puntos/{id}/guardar', [App\Http\Controllers\PuntoController::class, 'guardarPuntos'])->name('puntos.guardar');
+Route::delete('/puntos/eliminar', [App\Http\Controllers\PuntoController::class, 'eliminarPuntos'])->name('puntos.eliminar');
+Route::put('/puntos/{id}', [App\Http\Controllers\PuntoController::class, 'modificarPunto'])->name('puntos.modificar');
 Route::resource('/reportes', \App\Http\Controllers\ReporteController::class);
 Route::get('/reportes/{reporte}', [\App\Http\Controllers\ReporteController::class, 'show'])->name('reportes.show');
 
