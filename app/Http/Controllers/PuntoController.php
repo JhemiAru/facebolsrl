@@ -26,13 +26,6 @@ class PuntoController extends Controller
         // Sumamos los puntos actuales de esta inscripción
         $puntosActuales = Punto::where('id_inscripcion', $id)->sum('puntos_ganados');
 
-        // Verificamos el límite de 100 puntos
-        if (($puntosActuales + $request->puntos_ganados) > 100) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Límite excedido. El pasante tiene ' . $puntosActuales . ' puntos y el máximo es 100.'
-            ], 422);
-        }
 
         // Guardamos los puntos
         Punto::create([

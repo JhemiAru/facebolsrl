@@ -1012,7 +1012,7 @@
                                         <td scope="row">
                                             <div class="hora-laboral" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b; border-color: #f59e0b;">
                                                 <h4 id="globalTotalPuntosBanner">
-                                                    {{ $inscripcions->puntos()->sum('puntos_ganados') ?? 0 }} / 100
+                                                    {{ $inscripcions->puntos()->sum('puntos_ganados') ?? 0 }}
                                                 </h4>
                                                 <small><i class="bi bi-trophy"></i> Puntos Acumulados</small><br>
                                                 <small>Puntos Extra: 0 | Descuento de Puntos: 0</small>
@@ -1728,12 +1728,12 @@
                                             <option value="1" data-desc="TICKET INDIVIDUAL">Ticket individual (+1)</option>
                                         </optgroup>
                                         <optgroup label="Escala de Tickets (Premios)">
-                                            <option value="8" data-desc="ESCALA: 5 TICKETS">5 Tickets (+8 pts)</option>
-                                            <option value="15" data-desc="ESCALA: 10 TICKETS">10 Tickets (+15 pts)</option>
-                                            <option value="30" data-desc="ESCALA: 20 TICKETS">20 Tickets (+30 pts)</option>
-                                            <option value="50" data-desc="ESCALA: 30 TICKETS">30 Tickets (+50 pts)</option>
-                                            <option value="70" data-desc="ESCALA: 40 TICKETS">40 Tickets (+70 pts)</option>
-                                            <option value="100" data-desc="ESCALA: 50 TICKETS">50 Tickets (+100 pts)</option>
+                                            <option value="otro" data-desc="ESCALA: 5 TICKETS">5 Tickets (+8 pts)</option>
+                                            <option value="otro" data-desc="ESCALA: 10 TICKETS">10 Tickets (+15 pts)</option>
+                                            <option value="otro" data-desc="ESCALA: 20 TICKETS">20 Tickets (+30 pts)</option>
+                                            <option value="otro" data-desc="ESCALA: 30 TICKETS">30 Tickets (+50 pts)</option>
+                                            <option value="otro" data-desc="ESCALA: 40 TICKETS">40 Tickets (+70 pts)</option>
+                                            <option value="otro" data-desc="ESCALA: 50 TICKETS">50 Tickets (+100 pts)</option>
                                             <option value="otro" data-desc="VENTA DE TICKETS">Otra cantidad de tickets...</option>
                                         </optgroup>
                                         <optgroup label="3. Infracciones (Descuentos)">
@@ -1753,11 +1753,15 @@
 
                                 <div class="d-flex justify-content-center align-items-center gap-2 mb-3 flex-wrap" id="contenedorInputsPuntos" style="display: none !important;">
                                     <div class="w-100">
-                                        <label class="form-label small text-start w-100">Cantidad (pts)</label>
-                                        <input type="number" id="inputPuntosExtra" class="form-control text-center mx-auto" style="width: 100px;" placeholder="Ej. 10 o -2">
+                                        <label class="form-label small text-start w-100 text-center">Cantidad (pts)</label>
+                                        <div class="d-flex justify-content-center align-items-center gap-3">
+                                            <button type="button" class="btn btn-sm btn-danger" onclick="cambiarPuntosExtra(-1)" style="width: 40px; height: 40px; font-size: 1.2rem; font-weight: bold; border-radius: 8px;">−</button>
+                                            <input type="number" id="inputPuntosExtra" class="form-control text-center m-0" style="width: 100px; height: 40px; font-size: 1.2rem;" placeholder="0">
+                                            <button type="button" class="btn btn-sm btn-success" onclick="cambiarPuntosExtra(1)" style="width: 40px; height: 40px; font-size: 1.2rem; font-weight: bold; border-radius: 8px;">+</button>
+                                        </div>
                                     </div>
                                     <div class="w-100 mt-2">
-                                        <label class="form-label small text-start w-100">Motivo</label>
+                                        <label class="form-label small text-start w-100 text-center">Motivo</label>
                                         <input type="text" id="inputDescripcionPuntos" class="form-control text-center" placeholder="Ej. PUNTUALIDAD">
                                     </div>
                                 </div>
@@ -2370,6 +2374,14 @@ function actualizarCriterioPuntos() {
     } else {
         inputsContainer.style.setProperty('display', 'none', 'important');
     }
+}
+
+function cambiarPuntosExtra(delta) {
+    const input = document.getElementById('inputPuntosExtra');
+    let val = parseInt(input.value || '0', 10);
+    val = isNaN(val) ? 0 : val;
+    val += delta;
+    input.value = val;
 }
 
 async function guardarPuntosBD() {
